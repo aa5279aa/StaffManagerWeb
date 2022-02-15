@@ -51,20 +51,23 @@
 * 账号 
 * 密码 
 
-
-
 ## 数据库设计：
-### 表名：admin_table
+### 表名：admin_table 管理员表
 #### 字段：
-* 编号   
-* 账号   
-* 密码   
-* 生成时间   
+* 编号:admin_id 
+* 账号:account
+* 密码:password
+* 最后修改时间:timestamp
 
-### 表名：staff_table
+### 表名：account_table 员工信息表
 ####  字段：  
-* 编号   
-* 账号  
-* 密码  
-* 生成时间.
-
+* 编号:account_id
+* 工号:job_id
+* 账号:account
+* 部门:password
+* 入职日期:entry_data
+* 职位:position
+* 个人简介:describes
+* 照片:img_url
+* 备注:remark
+* 最后修改时间:timestamp
