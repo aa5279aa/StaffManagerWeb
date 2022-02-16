@@ -5,21 +5,24 @@ http://localhost:9020/StaffVue/#/login
 
 2.管理主页      
 views/manager
+http://localhost:9020/StaffVue/#/manager
+
 
 
 
 
 3.添加修改员工    
 views/edit   
-
+http://localhost:9020/StaffVue/#/edit
 
 
 
 4.员工查询      
 views/select
-
+http://localhost:9020/StaffVue/#/select
 
 
 
 5.二维码生成     
 views/showqr
+http://localhost:9020/StaffVue/#/showqr

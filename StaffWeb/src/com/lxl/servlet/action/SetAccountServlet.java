@@ -34,10 +34,9 @@ public class SetAccountServlet extends HttpServlet {
             String s = service.saveOrUpdateAccount(accountBean);
             writer.write(s);
         } catch (Exception e) {
-            writer.write("error");
+            writer.write("{result:\"fail\"}");
             e.printStackTrace();
         }
-        writer.write("success");
         writer.flush();
     }
 

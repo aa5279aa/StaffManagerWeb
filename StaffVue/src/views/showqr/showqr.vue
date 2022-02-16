@@ -1,6 +1,7 @@
 <!-- 扫码登录 -->
 <template>
   <div class="login-view">
+    二维码页面
     <wxlogin :theme="'black'" :appid="appid" :scope="'snsapi_login'" :redirect_uri="redirect_uri" />
     <dialog-authorization :show.sync="show" :msg="msg" @sure="confirmBinding" />
   </div>

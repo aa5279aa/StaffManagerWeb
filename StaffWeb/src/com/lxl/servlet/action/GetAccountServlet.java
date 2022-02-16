@@ -29,7 +29,7 @@ public class GetAccountServlet extends HttpServlet {
             //获取所有商区
             String accountList = request.getParameter("accountList");
             int start = Integer.parseInt(request.getParameter("start"));
-            int maxNum = Integer.parseInt(request.getParameter("max_num"));
+            int maxNum = Integer.parseInt(request.getParameter("maxNum"));
             String jsonString2 = service.selectAccount(accountList, start, maxNum);
             writer.write(jsonString2);
         } catch (Exception e) {

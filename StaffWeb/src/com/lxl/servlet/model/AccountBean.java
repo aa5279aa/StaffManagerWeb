@@ -23,8 +23,7 @@ public class AccountBean {
     public int accountId;
     public String jobId;
     public String account;
-    public String password;
-    public String entryData;
+    public String entryDate;
     public String position;//
     public String describes;
     public String imgUrl;

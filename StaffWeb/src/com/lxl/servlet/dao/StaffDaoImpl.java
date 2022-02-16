@@ -27,33 +27,47 @@ public class StaffDaoImpl implements StaffDao {
     }
 
 
-    @Override
     public boolean insertOrUpdateAccountBean(AccountBean accountBean) {
         StringBuilder sql = new StringBuilder();
-        sql.append("UPDATE " + ACCOUNT_TABLE + " SET ");
-        sql.append(" account_id =" + accountBean.accountId);
-        sql.append(" account =" + accountBean.account);
-        sql.append(" password =" + accountBean.password);
-        sql.append(" entry_data =" + accountBean.entryData);
-        sql.append(" position =" + accountBean.position);
-        sql.append(" describes =" + accountBean.describes);
-        sql.append(" img_url =" + accountBean.imgUrl);
-        sql.append(" remark =" + accountBean.remark);
 
-        if (accountBean.accountId != 0) {
+
+        if (accountBean.accountId == 0) {
+            //插入
+            sql.append("INSERT INTO " + ACCOUNT_TABLE + " ( job_id,account, entry_data,position,describes,img_url,remark )" +
+                    "VALUES " +
+                    "(?,?,?,?,?,?,?);");
+        } else {
+            //修改
+            sql.append("UPDATE " + ACCOUNT_TABLE + " SET ");
+            sql.append(" job_id =?,");
+            sql.append(" account =?,");
+            sql.append(" entry_data =?,");
+            sql.append(" position =?,");
+            sql.append(" describes =?,");
+            sql.append(" img_url =?,");
+            sql.append(" remark =?");
             sql.append(" where account_id = ").append(accountBean.accountId);
         }
-        Statement stmt = null;
+
+        PreparedStatement pstmt = null;
         try {
-            stmt = conn.createStatement();
-            return stmt.executeUpdate(sql.toString()) > 0;
+            pstmt = conn.prepareStatement(sql.toString());
+            pstmt.setString(1, accountBean.jobId);
+            pstmt.setString(2, accountBean.account);
+            pstmt.setString(3, accountBean.entryDate);
+            pstmt.setString(4, accountBean.position);
+            pstmt.setString(5, accountBean.describes);
+            pstmt.setString(6, accountBean.imgUrl);
+            pstmt.setString(7, accountBean.remark);
+            return pstmt.executeUpdate() > 0;
         } catch (Exception e) {
             e.printStackTrace();
+
             return false;
         } finally {
-            if (stmt != null) {
+            if (pstmt != null) {
                 try {
-                    stmt.close();
+                    pstmt.close();
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
@@ -108,8 +122,8 @@ public class StaffDaoImpl implements StaffDao {
                 accountBean.accountId = account_id;
                 accountBean.jobId = job_id;
                 accountBean.account = account;
-                accountBean.password = password;
-                accountBean.entryData = entry_data;
+//                accountBean.password = password;
+                accountBean.entryDate = entry_data;
                 accountBean.position = position;
                 accountBean.describes = describes;
                 accountBean.imgUrl = img_url;
@@ -136,7 +150,7 @@ public class StaffDaoImpl implements StaffDao {
 
     @Override
     public Integer hasAdminBean(AdminBean adminBean) {
-        String sql = "select * from " + ADMIN_TABLE + " where account = " + adminBean.account + " and password " + adminBean.password;
+        String sql = "select * from " + ADMIN_TABLE + " where account = \'" + adminBean.account + "\' and password =\'" + adminBean.password + "\'";
         PreparedStatement preStmt = null;
         try {
             preStmt = conn.prepareStatement(sql);

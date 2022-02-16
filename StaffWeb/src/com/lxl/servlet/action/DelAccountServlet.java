@@ -24,8 +24,8 @@ public class DelAccountServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         PrintWriter writer = response.getWriter();
         try {
-            String account_id = request.getParameter("account_id");
-            String s = instance.deleteAccount(Integer.parseInt(account_id));
+            String accountId = request.getParameter("accountId");
+            String s = instance.deleteAccount(Integer.parseInt(accountId));
             writer.write(s);
         } catch (Exception e) {
             e.printStackTrace();

@@ -1,0 +1,66 @@
+1.登录验证
+/admin_select
+request{
+    account:'liuyu',
+    password:'0',
+}
+
+response:{"admin_id":1002,"isHave":true,"result":"success"}
+
+http://localhost:8080/staff/admin_select?account=liuyu&password=liuyu
+
+状态：OK
+
+2.查询/批量查询
+/account_select
+request{
+    accountList:'1001,1002',
+    start:0,
+    maxNum:10
+}
+response:
+{"accountList":[{"account":"liuyu","accountId":1001,"createTime":1644897014000,"describes":"没啥可说的","entryData":"2020-08-09","imgUrl":"http//:www.baidu.com","jobId":"t1001","position":"测试","remark":"备注","updateTime":1644905638000},{"account":"liuyu2","accountId":1002,"createTime":1644905196000,"describes":"没的说","entryData":"2020-08-09","imgUrl":"xxx","jobId":"t1002","position":"测试2","remark":"北湖","updateTime":1644905642000}],"result":"success"}
+http://localhost:8080/staff/account_select?accountList=1001&start=0&maxNum=10
+
+状态：OK
+
+3.删除
+/account_del
+request{
+    accountId:1002
+}
+response:
+{"result":"sucess"}
+
+http://localhost:8080/staff/account_del?accountId=1002
+状态：OK
+
+
+4.添加/编辑
+/account_set
+
+
+
+request{
+    accountBean:{
+                	"jobId": "jobId",
+                	"account": "account",
+                	"entryDate": "entryDate",
+                	"position": "position",
+                	"describes": "describes",
+                	"imgUrl": "http://www.baidu.com",
+                	"remark": "备注"
+                }
+
+}
+response:{"result":"sucess"}
+
+//插入
+http://localhost:8080/staff/account_set?accountBean=%7B%0A%09%22jobId%22%3A%20%22jobId%22%2C%0A%09%22account%22%3A%20%22account%22%2C%0A%09%22entryDate%22%3A%20%22entryDate%22%2C%0A%09%22position%22%3A%20%22position%22%2C%0A%09%22describes%22%3A%20%22describes%22%2C%0A%09%22imgUrl%22%3A%20%22http%3A%2F%2Fwww.baidu.com%22%2C%0A%09%22remark%22%3A%20%22%E5%A4%87%E6%B3%A8%22%0A%7D
+
+//修改
+http://localhost:8080/staff/account_set?accountBean=%7B%0A%09%22accountId%22%3A%20%221003%22%2C%0A%09%22jobId%22%3A%20%22jobId%22%2C%0A%09%22account%22%3A%20%22account%22%2C%0A%09%22entryDate%22%3A%20%22entryDate%22%2C%0A%09%22position%22%3A%20%22position%22%2C%0A%09%22describes%22%3A%20%22describes%22%2C%0A%09%22imgUrl%22%3A%20%22http%3A%2F%2Fwww.baidu.com%22%2C%0A%09%22remark%22%3A%20%22%E5%A4%87%E6%B3%A8%22%0A%7D
+
+状态：OK
+
+5.头像上传

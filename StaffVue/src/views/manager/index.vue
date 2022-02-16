@@ -1,32 +1,52 @@
 <template>
-  <div class="dashboard">
-    <div class="banner">
-      <div class="welcome">Hi，欢迎使用商用车数据宝！</div>
-      <div class="slogan">找数据，刷数据，就用数据宝</div>
+  <div class="container">
+    <!-- 左侧 -->
+    <div class="left-menu">
+      <button>员工列表</button>
+      <button>管理员列表</button>
     </div>
-    <div class="grids">
-      <div v-for="(item, index) in gridList" :key="index" class="grid" @click="navigate(item)">
-        <img class="pic" :src="item.src" />
-        <span class="title">{{ item.title }}</span>
+
+    <!-- 右侧 -->
+    <div class="right-content">
+
+      <div class="action-content">
+        <button>新增</button>
+        <button>无</button>
+      </div>
+      
+
+      <div>
+        <OnlineDataItem
+          v-for="(v, i) in pathList"
+          :key="i"
+          :index="i + 1"
+          :item="v"
+          :showType="'path'"
+          v-on:clickItem="handleClickItem"
+        />
       </div>
     </div>
   </div>
 </template>
 
 <script>
+// import OnlineDataItem from '../onlineData/components/onlineDataItem.vue'
 export default {
-  components: {},
+  components: {
+    // OnlineDataItem
+  },
   data() {
     return {
-      gridList: [
-        { src: require('../../assets/image/online-data.png'), title: '在线数据', link: '/online' },
-        { src: require('../../assets/image/own-data.png'), title: '我的数据', link: '/own' },
-        { src: require('../../assets/image/verify-data.png'), title: '高级搜索', link: '/verify' },
-        { src: require('../../assets/image/conversion.png'), title: '格式转换', link: '/path' }
-        // { src: require('../../assets/image/own-coin.png'), title: '我的下载币', link: '/coin' },
-        // { src: require('../../assets/image/ecu-reader.png'), title: '刷写王', link: '/reader' }
-        // { src: require('../../assets/image/update.png'), title: '软件更新', link: '/update' }
-      ]
+      select: 0,
+      pathList: [],
+      selectItem: {},
+      showLoading: false,
+      fileMap: new Map([
+        ['1', 'eol'],
+        ['2', 'hex'],
+        ['3', 'bin'],
+        ['4', 's19']
+      ])
     }
   },
   computed: {},
@@ -34,84 +54,138 @@ export default {
     this.requestMenu()
   },
   mounted() {},
+  watch: {
+    $route() {
+      this.requestMenu()
+    }
+  },
   methods: {
-    navigate(item) {
-      this.$store.commit('SET_OPTIMIZATION', false)
-      this.$router.push(item.link)
+    handleClickItem(item) {
+      console.log('handleClickItem:' + JSON.stringify(item))
+      this.selectItem = item
+      if (item.identifyFileType == undefined || item.identifyFileType == '') {
+        this.$router.push({
+          name: 'PathIndex',
+          params: {
+            treeId: item.id,
+            label: item.name,
+            parse: this.$route.params.parse
+          }
+        })
+      } else {
+        //弹出文件选择的选择框
+        this.$refs.refFile.dispatchEvent(new MouseEvent('click'))
+      }
+    },
+    fileLoad() {
+      //获取读取的文件File对象 下面两种方法实现效果一样
+      //方法一:原生html获取
+      // const selectedFile = document.getElementById('files').files[0];
+      //方法二:Vue实现
+      let filters = this.selectItem.filterFileFormat.split(',')
+      const selectedFile = this.$refs.refFile.files[0]
+      var name = selectedFile.name //选中文件的文件名
+      var size = selectedFile.size //选中文件的大小
+      this.$refs.refFile.value = null
+      let that = this
+
+      var suffix = name.substring(name.lastIndexOf('.') + 1).toLowerCase()
+      // if (suffix != 'bin' && suffix != 'hex' && suffix != 'eol') {
+      //   alert('不支持的格式类型')
+      //   return
+      // }
+      var desc = '仅支持'
+      var checkResult = filters.some(item => {
+        let fileType = that.fileMap.get(item)
+        desc += fileType + ','
+        return fileType == suffix
+      })
+      if (desc.endsWith(',')) {
+        desc = desc.substring(0, desc.length - 1)
+      }
+      desc += '类型'
+      if (!checkResult) {
+        alert(desc)
+        return
+      }
+      console.log('文件名:' + name + '大小:' + size + ',后缀名:' + suffix)
+      if (this.$route.params.parse) {
+        this.$router.push({
+          name: 'parseFileIndex',
+          params: {
+            file: selectedFile
+          }
+        })
+        return
+      }
+      //选中之后跳转页面
+      this.$router.push({
+        name: 'ConversionIndex',
+        params: {
+          status: 1,
+          id: this.selectItem.id,
+          file: selectedFile
+        }
+      })
     },
 
-    /**
-     * 请求首页菜单
-     */
     requestMenu() {
-      const params = { id: 112254 }
-      this.$apis.user.requestHomeMenu(params).then(res => {
-        console.log('requestHomeMenu:', JSON.stringify(res))
-        // {"data":[{"icon":"http://mft-static.51gonggui.com/pic/CKEditor.png","id":106570,"identifyFileType":0,"menuStatus":1,"name":"我的数据","parentId":112254,"transferAddress":""},{"icon":"http://mft-static.51gonggui.com/pic/引入富文本编辑框.png","id":106571,"identifyFileType":0,"menuStatus":1,"name":"在线数据","parentId":112254,"transferAddress":""},{"icon":"http://mft-static.51gonggui.com/pic/cron表达式.png","id":106572,"identifyFileType":0,"menuStatus":0,"name":"数据验证","parentId":112254,"transferAddress":""},{"id":106573,"identifyFileType":0,"menuStatus":1,"name":"格式转换","parentId":112254},{"id":106574,"identifyFileType":0,"menuStatus":1,"name":"刷写宝","parentId":112254}],"msg":"获取成功","status":200}
-      })
+      this.showLoading = true
+      this.$apis.user
+        .requestHomeMenu({
+          id: this.$route.params.treeId || 0
+        })
+        .then(res => {
+          console.log(res)
+          this.pathList = res.data
+        })
+        .catch(err => {
+          console.log(err)
+        })
+        .finally(() => {
+          this.showLoading = false
+        })
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.dashboard {
+.container {
+  display: flex;
+  flex: 1;
   width: 100%;
-  box-sizing: border-box;
-  .banner {
-    margin: 16px;
-    height: 180px;
-    background: #0062ff;
-    border-radius: 8px;
-    color: #ffffff;
+  border-radius: 4px;
+  background: #fff;
+  flex-direction: row;
+
+  .left-menu {
+    border: 1px solid #000;
+    width: 20%;
+    padding: 20px;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    padding-left: 32px;
-    .welcome {
-      font-size: 24px;
-      font-weight: 500;
-      line-height: 32px;
-    }
-    .slogan {
-      font-size: 14px;
-      font-weight: 400;
-      line-height: 22px;
-      margin-top: 8px;
-      opacity: 0.85;
+
+    button {
+      margin-top: 10px;
+      padding: 10px;
     }
   }
-  .grids {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: 200px 200px;
-    grid-row-gap: 16px;
-    grid-column-gap: 16px;
-    padding: 0 16px;
-    .grid {
+
+  .right-content {
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+
+    .action-content{
+      margin: 20px;
       display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      background: #ffffff;
-      cursor: pointer;
-    }
-    .grid:hover {
-      background: rgba(0, 0, 0, 0.05);
-    }
-    .grid:active {
-      background: #dddddd;
-    }
-    .pic {
-      width: 96px;
-      height: 96px;
-    }
-    .title {
-      font-size: 20px;
-      font-weight: 500;
-      color: #333333;
-      line-height: 32px;
-      margin-top: 12px;
+      flex-direction: row;
+      button {
+        margin: 10px;
+        padding: 10px;
+      }
+
     }
   }
 }
