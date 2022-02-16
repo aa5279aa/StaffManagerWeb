@@ -13,14 +13,10 @@ export function getChildItem(fileJson, idxs) {
   return selectItem
 }
 
-export function downloadFile(url, savePath = '') {
-  if (window.exeCall) {
-    window.exeCall.downloadFile(url, savePath).then(function (ret) {
-      window.exeCall.showMessage(`下载${ret ? '成功' : '失败'}`)
-    })
-  } else {
-    window.open(url, '_blank')
-  }
+export function downloadFile(url) {
+  
+  window.open(url, '_blank')
+  
 }
 
 // export function des3EncodeECB() {

@@ -1,8 +1,10 @@
 package com.lxl.servlet.action;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.lxl.servlet.model.AccountBean;
 import com.lxl.servlet.service.AccountService;
+import com.lxl.servlet.util.ServletUtil;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -29,9 +31,11 @@ public class SetAccountServlet extends HttpServlet {
         response.setContentType("text/html;charset=utf-8");
         PrintWriter writer = response.getWriter();
         try {
-            //转化获取ShopModel
-            AccountBean accountBean = JSON.parseObject(request.getParameter("accountBean"), AccountBean.class);
-            String s = service.saveOrUpdateAccount(accountBean);
+            //转化获取AccountBean
+            String string = request.getParameter("accountInfo");
+            AccountBean accountBean = JSON.parseObject(string, AccountBean.class);
+            JSONObject data = service.saveOrUpdateAccount(accountBean);
+            String s = ServletUtil.buildReponse(response, data);
             writer.write(s);
         } catch (Exception e) {
             writer.write("{result:\"fail\"}");

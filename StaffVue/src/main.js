@@ -19,22 +19,6 @@ router.beforeEach((to, from, next) => {
   let times = 0
   let isExe = false
   let timer = setInterval(() => {
-    console.log('window.exeCall:' + typeof window.exeCall)
-    if (window.exeCall) {
-      isExe = true
-      //获取token
-      if (store.state.token == undefined || store.state.token == '') {
-        console.log('window readCache')
-        window.exeCall.readCache('token').then(token => {
-          console.log('window readCache token:' + token)
-          if (typeof token == 'string' && token != '') {
-            store.commit('SET_TOKEN', token)
-          } else {
-            times = 5
-          }
-        })
-      }
-    }
 
     let token = store.state.token
     if (typeof token == 'string' && token != '') {

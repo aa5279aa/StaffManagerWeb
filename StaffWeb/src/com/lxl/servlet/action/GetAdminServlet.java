@@ -1,7 +1,9 @@
 package com.lxl.servlet.action;
 
+import com.alibaba.fastjson.JSONObject;
 import com.lxl.servlet.model.AdminBean;
 import com.lxl.servlet.service.AccountService;
+import com.lxl.servlet.util.ServletUtil;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -28,7 +30,8 @@ public class GetAdminServlet extends HttpServlet {
             AdminBean adminBean = new AdminBean();
             adminBean.account = request.getParameter("account");
             adminBean.password = request.getParameter("password");
-            String s = service.selectAdmin(adminBean);
+            JSONObject data = service.selectAdmin(adminBean);
+            String s = ServletUtil.buildReponse(response, data);
             writer.write(s);
         } catch (Exception e) {
             e.printStackTrace();

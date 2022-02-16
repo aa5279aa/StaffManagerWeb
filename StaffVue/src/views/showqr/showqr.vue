@@ -55,20 +55,7 @@ export default {
       let isExe = false
       let deviceMacl = ''
       this.timer2 = setInterval(() => {
-        if (window.exeCall) {
-          isExe = true
-          window.exeCall &&
-            window.exeCall.getHashCode().then(function (deviceMac) {
-              let tokenJson = { 'device-mac': deviceMac }
-              deviceMacl = deviceMac
-              window.exeCall.des3EncodeECB(JSON.stringify(tokenJson), 1).then(function (token) {
-                window.exeCall.saveCache('token', token).then(function (ret) {
-                  console.log('save token:' + ret)
-                  that.$store.commit('SET_TOKEN', token)
-                })
-              })
-            })
-        }
+        
         if (that.$store.state.token != undefined && that.$store.state.token != '') {
           clearInterval(this.timer)
           that.requestLogin(code, deviceMacl, agreeStatus)

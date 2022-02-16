@@ -8,7 +8,7 @@ import { decryptByDES } from '@/utils/utils'
 const service = axios.create({
   // baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
   // baseURL: 'http://yapi.mft100.cn/mock/37', // url = base url + request url
-  baseURL: process.env.NODE_ENV === 'production' ? 'https://api.51gonggui.com' : '/proxyApi', // url = base url + request url
+  baseURL: process.env.NODE_ENV === 'production' ? 'http://localhost:8080/staff/' : '/proxyApi', // url = base url + request url
   // withCredentials: true, // send cookies when cross-domain requests
   timeout: 15000 // request timeout
 })
@@ -18,10 +18,6 @@ service.interceptors.request.use(
   config => {
     // do something before request is sent
     console.log('store.state.token:' + store.state.token)
-    config.headers['token'] = store.state.token
-    config.headers['app-id'] = '103'
-    config.headers['app-version'] = '1.0.0'
-    config.headers['app-type'] = '9'
     return config
   },
   error => {

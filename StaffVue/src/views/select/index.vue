@@ -1,36 +1,38 @@
 <template>
-  <div v-loading="showLoading" class="online-data-wrap">
-    <div class="online-data-content">
-      <p>员工信息</p>
+  <div v-loading="showLoading" class="login-view">
+    <div class="login-form">
+      <p><b>员工信息</b></p>
       <div>
-        <p>编号:{{account.accountId}}<p/>
-        <p>姓名:{{account.accountName}}<p/>
-        <p>姓名:{{account.accountName}}<p/>
-        <p>姓名:{{account.accountName}}<p/>
-        <p>姓名:{{account.accountName}}<p/>
-      </div>
+        <p v-text="'编号：' + accountInfo.accountId"></p>
+        <p v-text="'姓名：' + accountInfo.accountName"></p>
+        <p v-text="'工号：' + accountInfo.jobId"></p>
+        <p v-text="'入职日期：' + accountInfo.entryDate"></p>
+        <p v-text="'职位：' + accountInfo.position"></p>
+        <p v-text="'描述：' + accountInfo.describes"></p>
+        <p v-text="'备注：' + accountInfo.remark"></p>
 
+         <button @click="clickClose">关闭</button>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-
 export default {
-  components: {
-    
-  },
+  components: {},
   data() {
     return {
-      account : {
-        accountId :1001,
-        accountName : 'liuyu',
+      showLoading: false,
+      accountInfo: {
+        accountId: 1001,
+        account: 'liuyu'
       }
     }
   },
   computed: {},
   created() {
-    // this.requestAccount()
+    var accountInfo = this.$route.params
+    this.accountInfo = accountInfo
   },
   mounted() {},
   watch: {
@@ -39,46 +41,53 @@ export default {
     }
   },
   methods: {
-    requestAccount() {
-      this.showLoading = true
-      this.$apis.user
-        .requestHomeMenu({
-          id: this.$route.params.accountId || 0
-        })
-        .then(res => {
-          console.log(res)
-          this.account = res.data
-        })
-        .catch(err => {
-          console.log(err)
-        })
-        .finally(() => {
-          this.showLoading = false
-        })
+    clickClose() {
+      this.$router.go(-1)
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.online-data-wrap {
+
+.login-view {
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  text-align: center;
+  // background-color: rgb(51, 51, 51);
+  background-color: #fff;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: center;
-  background: #f7f8fa;
-  padding: 17px 16px;
-  .p{
-    background-color: #000aaa;
-    width: 100%;
-    text-align: center;
+  justify-items: center;
+  align-items: center;
+}
+
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: left;
+  justify-items: left;
+  width: 50%;
+  border: 1px solid #000;
+  padding: 50px;
+  p {
+    width: 60%;
+    margin-left: 20%;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    b {
+      width: 100%;
+    }
   }
-  .online-data-content {
-    width: 30%;
-    border: 1px solid #000;
-    border-radius: 4px;
-    background: #fff;
-    justify-content: center;
-  
+  button {
+    width: 40%;
+    height: 30px;
+    margin-left: 30%;
   }
 }
 </style>

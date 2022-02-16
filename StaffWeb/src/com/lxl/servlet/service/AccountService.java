@@ -35,41 +35,46 @@ public class AccountService {
         logger = Logger.getLogger();
     }
 
-    public String saveOrUpdateAccount(AccountBean accountBean) throws Exception {
+    public JSONObject saveOrUpdateAccount(AccountBean accountBean) throws Exception {
         //插入酒店基础信息
         boolean flag = dao.insertOrUpdateAccountBean(accountBean);
-        JSONObject response = new JSONObject();
-        response.put("result", flag ? "sucess" : "fail");
-        return response.toJSONString();
+        JSONObject data = new JSONObject();
+        data.put("message", flag ? "添加成功" : "添加失败");
+        data.put("status", flag ? 200 : 500);
+        return data;
     }
 
-    public String deleteAccount(int accountId) throws Exception {
+    public JSONObject deleteAccount(int accountId) throws Exception {
         boolean flag = dao.deleteShopModel(accountId);
-        JSONObject response = new JSONObject();
-        response.put("result", flag ? "sucess" : "fail");
-        return response.toJSONString();
+        JSONObject data = new JSONObject();
+        data.put("message", flag ? "删除成功" : "删除失败");
+        data.put("status", flag ? 200 : 500);
+        return data;
     }
 
-    public String selectAccount(String accountIdList, int start, int maxNum) throws Exception {
+    public JSONObject selectAccount(String accountIdList, int start, int maxNum) throws Exception {
         List<AccountBean> accountBeans = dao.selectAccountBen(accountIdList, start, maxNum);
-        JSONObject response = new JSONObject();
-        response.put("accountList", accountBeans);
-        response.put("result", "success");
-        return response.toJSONString();
+        JSONObject data = new JSONObject();
+        data.put("accountList", accountBeans);
+        data.put("result", "success");
+        data.put("status", 200);
+        return data;
     }
 
-    public String selectAdmin(AdminBean adminBean) {
+    public JSONObject selectAdmin(AdminBean adminBean) {
         Integer admin_id = dao.hasAdminBean(adminBean);
-        JSONObject response = new JSONObject();
+        JSONObject data = new JSONObject();
         if (admin_id == null) {
-            response.put("isHave", false);
-            response.put("result", "fail");
+            data.put("status", 500);
+            data.put("result", "fail");
+            data.put("isSuccess", false);
         } else {
-            response.put("result", "success");
-            response.put("admin_id", admin_id);
-            response.put("isHave", true);
+            data.put("status", 200);
+            data.put("result", "success");
+            data.put("admin_id", admin_id);
+            data.put("isSuccess", true);
         }
-        return response.toJSONString();
+        return data;
     }
 
 }

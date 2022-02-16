@@ -98,11 +98,16 @@ public class StaffDaoImpl implements StaffDao {
 
     @Override
     public List<AccountBean> selectAccountBen(String accountIdList, int start, int maxNum) {
-        String sql = "select * from account_table where account_id in (" + accountIdList + ") limit " + maxNum + ";";
+        StringBuilder sql = new StringBuilder();
+        if (accountIdList == null || accountIdList.length() == 0) {
+            sql.append( "select * from account_table limit " + maxNum + ";");
+        } else {
+            sql.append("select * from account_table where account_id in (" + accountIdList + ") limit " + maxNum + ";");
+        }
         PreparedStatement preStmt = null;
         List<AccountBean> list = new ArrayList<>();
         try {
-            preStmt = conn.prepareStatement(sql);
+            preStmt = conn.prepareStatement(sql.toString());
             ResultSet rs = preStmt.executeQuery();
 
             while (rs.next()) {

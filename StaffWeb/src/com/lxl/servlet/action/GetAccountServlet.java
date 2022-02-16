@@ -1,7 +1,9 @@
 package com.lxl.servlet.action;
 
+import com.alibaba.fastjson.JSONObject;
 import com.lxl.servlet.service.AccountService;
 import com.lxl.servlet.service.InputService;
+import com.lxl.servlet.util.ServletUtil;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -30,8 +32,9 @@ public class GetAccountServlet extends HttpServlet {
             String accountList = request.getParameter("accountList");
             int start = Integer.parseInt(request.getParameter("start"));
             int maxNum = Integer.parseInt(request.getParameter("maxNum"));
-            String jsonString2 = service.selectAccount(accountList, start, maxNum);
-            writer.write(jsonString2);
+            JSONObject data = service.selectAccount(accountList, start, maxNum);
+            String s = ServletUtil.buildReponse(response, data);
+            writer.write(s);
         } catch (Exception e) {
             writer.write("error");
             e.printStackTrace();

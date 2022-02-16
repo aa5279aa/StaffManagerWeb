@@ -2,39 +2,32 @@ import request from '@/utils/request'
 
 export function requestLogin(data) {
   return request({
-    url: '/mftapi/ark/wx/login/v1/get/access_token',
+    url: '/admin_select',
     method: 'post',
-    data
+    params:data
   })
 }
 
-export function requestHomeMenu(data) {
+export function requestSelect(data) {
   return request({
-    url: '/mftapi/ark/auth/data_treasure/menu/v1/get/menu_list',
+    url: '/account_select',
     method: 'post',
-    data
+    params:data
   })
 }
 
-export function requestUserInfo(data) {
+export function requestDel(data) {
   return request({
-    url: '/mftapi/ark/auth/arkUserInfo/v1/get/userInfo',
+    url: '/account_del',
     method: 'post',
-    data
+    params:data
   })
 }
 
-// export function getQiniuToken(data) {
-//   return request({
-//     url: 'https://wx.51gonggui.com/commonrail/api/rest-api/qiniu/uToken.json',
-//     method: 'post',
-//     data
-//   })
-// }
-
-// export function logout() {
-//   return request({
-//     url: '/vue-admin-template/user/logout',
-//     method: 'post'
-//   })
-// }
+export function requestSet(data) {
+  return request({
+    url: 'account_set',
+    method: 'post',
+    params:data
+  })
+}

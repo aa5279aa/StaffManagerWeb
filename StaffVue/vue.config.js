@@ -17,9 +17,7 @@ module.exports = {
     proxy: {
       //配置跨域
       '/proxyApi': {
-        target: 'https://api.51gonggui.com',
-        // target: 'http://192.168.10.191:8441',
-        // ws:true,
+        target: 'http://localhost:8080/staff',
         changOrigin: true,
         pathRewrite: {
           '^/proxyApi': '/'

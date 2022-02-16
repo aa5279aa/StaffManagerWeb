@@ -1,6 +1,8 @@
 package com.lxl.servlet.action;
 
+import com.alibaba.fastjson.JSONObject;
 import com.lxl.servlet.service.AccountService;
+import com.lxl.servlet.util.ServletUtil;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -25,7 +27,8 @@ public class DelAccountServlet extends HttpServlet {
         PrintWriter writer = response.getWriter();
         try {
             String accountId = request.getParameter("accountId");
-            String s = instance.deleteAccount(Integer.parseInt(accountId));
+            JSONObject data = instance.deleteAccount(Integer.parseInt(accountId));
+            String s = ServletUtil.buildReponse(response, data);
             writer.write(s);
         } catch (Exception e) {
             e.printStackTrace();
