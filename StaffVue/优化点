@@ -1,0 +1,1 @@
+conversion和parseFile可以合并，逻辑基本上是一致的，只是请求接口不一样。
