@@ -2,6 +2,7 @@
 <template>
   <div class="login-view">
     二维码页面
+    <img v-if="qrUrl" :src="qrUrl" class="avatar" />
     <wxlogin :theme="'black'" :appid="appid" :scope="'snsapi_login'" :redirect_uri="redirect_uri" />
     <dialog-authorization :show.sync="show" :msg="msg" @sure="confirmBinding" />
   </div>
@@ -19,14 +20,7 @@ export default {
   props: {},
   data() {
     return {
-      isJump: false,
-      timer: null,
-      timer2: null,
-      code: this.$route.query.code,
-      show: false,
-      msg: '该账户为首次使用, 请您确认是否绑定此电脑, 绑定后不可修改, 只能在此电脑使用',
-      appid: 'wx8f2de73d2dd6bfe3',
-      redirect_uri: encodeURIComponent('https://api.51gonggui.com/decoder-data/#/login')
+      qrUrl:""
     }
   },
   computed: {},
@@ -35,15 +29,14 @@ export default {
   //     if (val) this.requestLogin(val)
   //   }
   // },
-  created() {
-    console.log('this.$route.query.code:', this.$route.query.code)
-    this.timer = setInterval(() => {
-      if (this.$route.query.code && !this.isJump) this.actionLogin(this.$route.query.code)
-    }, 350)
+  created() { 
+    //请求接口
+    var accoutUrl = this.$route.query.accoutUrl
+    console.log('accoutUrl:', accoutUrl)
+    //发送请求，
+   
   },
-  beforeDestroy() {
-    clearInterval(this.timer)
-  },
+ 
   mounted() {},
   methods: {
     actionLogin(code, agreeStatus = 1) {
@@ -112,6 +105,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
+.avatar {
+    width: 178px;
+    height: 178px;
+    display: block;
+  }
+
 .login-view {
   width: 100%;
   height: 100%;

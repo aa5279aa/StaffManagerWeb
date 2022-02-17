@@ -59,12 +59,18 @@ export default {
 
     goToQr() {
       debugger
-      this.$router.push({
-        name: 'showqr',
-        params: {
-          info: JSON.stringify(this.item)
-        }
-      })
+      console.log("this.HTTPURL:"+ this.HTTPURL)
+     
+      var myUrl = this.HTTPURL+"select?accountId="+this.item.accountId
+      var url = "	https://api.pwmqr.com/qrcode/create/?url="+ encodeURIComponent(myUrl)
+      console.log(url)
+      window.open(url, '_blank');
+      // this.$router.push({
+      //   name: 'showqr',
+      //   params: {
+      //     info: JSON.stringify(this.item)
+      //   }
+      // })
     }
   }
 }

@@ -3,6 +3,7 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import './global.js'
+Vue.prototype.HTTPURL = 'http://localhost:9020/StaffVue/#/'
 
 router.beforeEach((to, from, next) => {
   // if (window.location.href.indexOf('code') >= 0) {

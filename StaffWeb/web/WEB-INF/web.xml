@@ -41,4 +41,12 @@
         <url-pattern>/admin_select</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>SetImageServlet</servlet-name>
+        <servlet-class>com.lxl.servlet.action.SetImageServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>SetImageServlet</servlet-name>
+        <url-pattern>/upload_img</url-pattern>
+    </servlet-mapping>
 </web-app>

@@ -31,3 +31,14 @@ export function requestSet(data) {
     params:data
   })
 }
+
+export function updateImg(data,config) {
+  return request({
+    url: 'upload_img',
+    method: 'post',
+    formData:data,
+    config:config,
+  })
+}
+
+
