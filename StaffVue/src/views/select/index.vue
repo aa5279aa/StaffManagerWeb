@@ -10,8 +10,8 @@
         <p v-text="'职位：' + accountInfo.position"></p>
         <p v-text="'描述：' + accountInfo.describes"></p>
         <p v-text="'备注：' + accountInfo.remark"></p>
-
-         <button @click="clickClose">关闭</button>
+        <img class="default-image" :src="accountInfo.imgUrl" onerror="../assets/image/coin.png"/>
+        <button @click="clickClose">关闭</button>
       </div>
     </div>
   </div>

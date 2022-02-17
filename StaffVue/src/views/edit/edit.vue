@@ -12,19 +12,41 @@
       <p>职位：<input type="text" v-model="accountInfo.position" /></p>
       <p>简介: <input type="text" v-model="accountInfo.describes" /></p>
       <p>备注: <input type="text" v-model="accountInfo.remark" /></p>
-      <el-upload
-        class="avatar-uploader"
-        action="http://localhost:8080/staff/upload_img"
-        accept="image/jpeg,image/gif,image/png"
-        :show-file-list="false"
-        :on-success="handleAvatarSuccess"
+
+      <el-form
+        ref="form"
+        label-position="left"
+        :model="form"
+        label-width="80px"
+        style="margin: 20px; width: 60%; min-width: 600px"
       >
-        <img v-if="imageUrl" :src="imageUrl" class="avatar" />
-        <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-      </el-upload>
+        <el-form-item label="上传文件" prop="excelFile">
+          <el-upload
+            class="upload-demo"
+            ref="upload"
+            :action="this.SERVE_URL + 'upload_img'"
+            name="excelFile"
+            drag
+            :data="upData"
+            :file-list="fileList"
+            :on-error="uploadFalse"
+            :on-success="uploadSuccess"
+            :auto-upload="false"
+          >
+            <i class="el-icon-upload"></i>
+            <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+            <!-- <el-button slot="trigger" size="small" >选取文件</el-button> -->
+          </el-upload>
+        </el-form-item>
+
+        <!-- <el-form-item>
+          <el-button type="primary" @click="submitUpload(form)">导入</el-button>
+         
+        </el-form-item> -->
+      </el-form>
 
       <!-- <p>头像: <input type="file" id="files" ref="refFile" multiple="multiple" v-on:change="fileLoad" /></p> -->
-      <button @click="uploadFile">提交</button>
+      <button @click="submitUpload">提交</button>
     </div>
   </div>
 </template>
@@ -37,12 +59,23 @@ export default {
   data() {
     console.log('data')
     return {
+      baseUrl: this.HTTPURL + 'upload_img',
       isJump: false,
       accountInfo: {},
-      imageUrl: ''
+      imageUrl: '',
+      imageFile: {},
+      form: {
+        fileName: '',
+        coordinateType: 'BD09'
+      },
+      fileList: []
     }
   },
-  computed: {},
+  computed: {
+    upData: function () {
+      return this.form
+    }
+  },
   created() {
     // debugger
     var accountInfo = this.$route.params
@@ -51,25 +84,51 @@ export default {
 
   mounted() {},
   methods: {
-    handleAvatarSuccess(res, file) {
-      console.log("");
-      this.imageUrl = URL.createObjectURL(file.raw)
-    },
-    beforeAvatarUpload(file) {
-      const isFit = (file.type === 'image/jpeg' || file.type === 'image/png')
-      const isLt2M = file.size / 1024 / 1024 < 2
-
-      if (!isFit) {
-        this.$message.error('上传头像图片只能是 JPG或Png 格式!')
-      }
-      if (!isLt2M) {
-        this.$message.error('上传头像图片大小不能超过 2MB!')
-      }
-      return isFit && isLt2M
-    },
-    requestRegister() {
+    //文件上传成功触发
+    uploadSuccess(response) {
       debugger
+      console.log(response)
+      if (response.data.status == 200) {
+        // this.$message({
+        //   message: '导入成功',
+        //   type: 'success'
+        // })
+        this.requestRegister(response.data.imgUrl)
+      } else {
+        this.$message({
+          message: '导入失败',
+          type: 'error'
+        })
+      }
+    },
+    //文件上传失败触发
+    uploadFalse() {
+      this.$message({
+        message: '文件上传失败！',
+        type: 'error'
+      })
+    },
 
+    //表单提交
+    submitUpload() {
+      this.$refs.form.validate(valid => {
+        debugger
+        if (valid) {
+          //触发组件的action
+          this.$refs.upload.submit() //主要是这里
+        } else {
+          console.log('error submit!!')
+          return false
+        }
+      })
+    },
+    //表单取消
+    onCancel() {
+      this.$refs.form.resetFields()
+    },
+    requestRegister(imgUrl) {
+      debugger
+      this.accountInfo.imgUrl = imgUrl
       const params = {
         accountInfo: JSON.stringify(this.accountInfo)
       }
@@ -90,36 +149,6 @@ export default {
         .finally(() => {
           this.showLoading = false
         })
-    },
-    fileLoad() {
-      console.log('fileLoad')
-      const selectedFile = this.$refs.refFile.files[0]
-      var name = selectedFile.name //选中文件的文件名
-      var size = selectedFile.size //选中文件的大小
-      this.$refs.refFile.value = null
-      this.imgPath = selectedFile
-      console.log('name:' + name + ',size:' + size)
-    },
-    uploadFile() {
-      let config = {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          Authorization: this.token
-        }
-      }
-      var formData = new FormData()
-      formData.append('num', 1)
-      // formData.append('linkId', this.addId)
-      formData.append('rfilename', this.imgPath.name)
-      formData.append('fileUpload', this.imgPath)
-      this.axios.post('http://localhost:8080/staff/upload_img', formData, config).then(response => {
-        if (response.data.info == 'success') {
-          this.$message({
-            type: 'success',
-            message: '附件上传成功!'
-          })
-        }
-      })
     }
   }
 }

@@ -12,10 +12,8 @@ public class ImageModel {
 
     public int mImgId;
     public String mImgName;
-    public String mImgPath;
-    public String mImgUrl;
-    public int mRelationId;//
-    public String mRelationName;//
+    public String mImgPath;//相对于本机的地址
+    public String mImgUrl;//网络连接
     public int mType;//类型
 
     public FileItem fileItem;

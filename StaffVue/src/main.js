@@ -4,6 +4,7 @@ import router from './router'
 import store from './store'
 import './global.js'
 Vue.prototype.HTTPURL = 'http://localhost:9020/StaffVue/#/'
+Vue.prototype.SERVE_URL = 'http://localhost:8080/staff/'
 
 router.beforeEach((to, from, next) => {
   // if (window.location.href.indexOf('code') >= 0) {
@@ -13,7 +14,7 @@ router.beforeEach((to, from, next) => {
   //   // store.state.code = code
   // }
   console.log('path:' + to.path)
-  if (to.path == '/login' || store.state.token) {
+  if (to.path == '/login' || store.state.isLogin) {
     next()
     return
   }

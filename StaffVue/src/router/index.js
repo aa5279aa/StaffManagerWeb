@@ -34,6 +34,12 @@ const routes = [
     name: 'edit',
     component: () => import('../views/edit/edit.vue'),
     meta: { title: '编辑页面' }
+  },
+  {
+    path: '/upload',
+    name: 'upload',
+    component: () => import('../views/edit/upload.vue'),
+    meta: { title: '上传页面' }
   }
 ]
 

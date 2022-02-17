@@ -5,6 +5,6 @@ package com.lxl.servlet.config;
  */
 public class Config {
 
-    public static String Save_Path = "C://img";
+    public static String Save_Path = "/Users/liuxl1/Pictures/img";
 
 }

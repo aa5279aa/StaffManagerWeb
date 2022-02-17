@@ -49,4 +49,15 @@
         <servlet-name>SetImageServlet</servlet-name>
         <url-pattern>/upload_img</url-pattern>
     </servlet-mapping>
+
+    <filter>
+        <filter-name>filterDemo1</filter-name>
+        <filter-class>com.lxl.servlet.filter.CorsInterceptor</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>filterDemo1</filter-name>
+        <url-pattern>/*</url-pattern>
+        <!-- /*是对所有的文件进行拦截 -->
+    </filter-mapping>
+
 </web-app>

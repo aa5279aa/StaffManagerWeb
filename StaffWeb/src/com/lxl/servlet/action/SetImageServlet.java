@@ -1,7 +1,9 @@
 package com.lxl.servlet.action;
 
+import com.alibaba.fastjson.JSONObject;
 import com.lxl.servlet.model.ImageModel;
 import com.lxl.servlet.service.InputService;
+import com.lxl.servlet.util.ServletUtil;
 import org.apache.commons.fileupload.FileItem;
 
 import javax.servlet.ServletException;
@@ -28,6 +30,7 @@ public class SetImageServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("utf-8");
         response.setContentType("text/html;charset=utf-8");
+        String realPath = request.getSession().getServletContext().getRealPath("");
         PrintWriter writer = response.getWriter();
         try {
             //解析请求参数
@@ -39,13 +42,14 @@ public class SetImageServlet extends HttpServlet {
             //主线程保存图片信息
 
             //线程    保存图片
-            inputService.saveImage(imageModel);
-
+            JSONObject data = inputService.saveImage(imageModel,realPath);
+            String s = ServletUtil.buildReponse(response, data);
+            writer.write(s);
         } catch (Exception e) {
             writer.write("error");
             e.printStackTrace();
         }
-        writer.write("图片上传成功");
+        //成功+连接
         writer.flush();
     }
 }

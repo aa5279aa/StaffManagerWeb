@@ -1,5 +1,6 @@
 package com.lxl.servlet.service;
 
+import com.alibaba.fastjson.JSONObject;
 import com.lxl.servlet.config.Config;
 import com.lxl.servlet.model.ImageModel;
 import com.lxl.servlet.model.AccountBean;
@@ -26,51 +27,20 @@ public class InputService {
 
     }
 
-
     //请求转化为ImgeModel
     public ImageModel readImageModel(List<FileItem> list) throws FileUploadException, IOException {
         ImageModel imageModel = new ImageModel();
-        String fileName = "temp.png";
         for (FileItem fileItem : list) {
-            String fieldName = fileItem.getFieldName();
-            if ("input_type".equals(fieldName)) {
-                String type = IOHelper.readStrByCode(fileItem.getInputStream(), "utf-8").trim();
-                imageModel.mType = type.startsWith("商区") ? ImageModel.IMAGE_MODEL_TYPE_TRADING : ImageModel.IMAGE_MODEL_TYPE_SHOP;
-            } else if ("input_nameId".equals(fieldName)) {
-                imageModel.mRelationName = IOHelper.readStrByCode(fileItem.getInputStream(), "utf-8").trim();
-            } else if ("input_img".equals(fieldName) && fileItem instanceof DiskFileItem) {
-                fileName = fileItem.getName();
-                imageModel.fileItem = fileItem;
+            if (!(fileItem instanceof DiskFileItem)) {
+                continue;
             }
-        }
-        //重新整理imgName
-        imageModel.mImgName = "SW_" + imageModel.mType + "_" + imageModel.mRelationName + "_" + fileName;
-        imageModel.mImgPath = Config.Save_Path;
-        imageModel.mImgUrl = imageModel.mImgPath + File.separator + imageModel.mImgName;
-        return imageModel;
-    }
-
-
-    //请求转化为Discountodel
-    public ImageModel readDiscountodel(HttpServletRequest request) throws FileUploadException {
-        DiskFileItemFactory factory = new DiskFileItemFactory();
-        ServletFileUpload upload = new ServletFileUpload(factory);
-        List<FileItem> fileItems = upload.parseRequest(request);
-        ImageModel imageModel = new ImageModel();
-        if (fileItems.size() > 0) {
-            FileItem fileItem = fileItems.get(0);
             String name = fileItem.getName();
-            imageModel.mImgName = fileItem.getFieldName();
-            //名称
-
-            //存储地址
-
-            //mType
-
-            //mRelationId 关联值
-
-            //mImgId自动生成
-
+            if (name == null || name.length() == 0) {
+                continue;
+            }
+            imageModel.mImgName = "Img_" + System.currentTimeMillis() + "_" + name;
+            imageModel.fileItem = fileItem;
+            break;
         }
         return imageModel;
     }
@@ -83,18 +53,34 @@ public class InputService {
     }
 
     //开个线程去存储
-    public String saveImage(ImageModel imageModel) throws Exception {
+    public JSONObject saveImage(ImageModel imageModel, String realPath) throws Exception {
+        JSONObject data = new JSONObject();
+
+        if (realPath.contains("out")) {
+            //开发环境
+            ///Users/liuxl1/develop/git_ware/waibao/StaffManagerWeb/StaffWeb/out/artifacts/staff/
+            imageModel.mImgPath = realPath + "img/" + imageModel.mImgName;
+        } else {
+            //服务器部署
+            imageModel.mImgPath = realPath + "img/" + imageModel.mImgName;
+        }
+        imageModel.mImgUrl = "http://localhost:8080/staff/img/" + imageModel.mImgName;
+
         //转存图片
-        File saveImgFile = new File(imageModel.mImgUrl);
+        File saveImgFile = new File(imageModel.mImgPath);
         if (!saveImgFile.getParentFile().exists()) {
             saveImgFile.getParentFile().mkdirs();
         }
         if (imageModel.fileItem != null) {
             imageModel.fileItem.write(saveImgFile);
+            data.put("status", 200);
+            data.put("imgPath", imageModel.mImgPath);
+            data.put("imgUrl", imageModel.mImgUrl);
         } else {
             File error = new File(saveImgFile.getAbsolutePath() + ".fail");
             saveImgFile.renameTo(error);
+            data.put("status", 500);
         }
-        return saveImgFile.getAbsolutePath();
+        return data;
     }
 }

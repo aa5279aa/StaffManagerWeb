@@ -58,9 +58,7 @@ export default {
     },
 
     goToQr() {
-      debugger
       console.log("this.HTTPURL:"+ this.HTTPURL)
-     
       var myUrl = this.HTTPURL+"select?accountId="+this.item.accountId
       var url = "	https://api.pwmqr.com/qrcode/create/?url="+ encodeURIComponent(myUrl)
       console.log(url)
