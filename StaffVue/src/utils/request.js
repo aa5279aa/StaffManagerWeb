@@ -17,7 +17,6 @@ const service = axios.create({
 service.interceptors.request.use(
   config => {
     // do something before request is sent
-    console.log('store.state.token:' + store.state.token)
     return config
   },
   error => {

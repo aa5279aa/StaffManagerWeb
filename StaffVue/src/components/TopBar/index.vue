@@ -8,7 +8,7 @@
       <span class="time-box">20210808 10:25</span>
     </template>
     <template v-else> -->
-    <img class="logo" src="../../assets/image/sjb.png" alt="数据宝" />
+    <img class="logo" src="../../assets/image/logo.png" alt="员工管理" />
     <!-- <img class="coin-pic" src="../../assets/image/coin.png" /> -->
     <!-- <span>下载币：88</span> -->
     <img class="time-pic" src="../../assets/image/time.png" />

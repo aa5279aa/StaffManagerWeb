@@ -64,12 +64,12 @@ public class AccountService {
     public JSONObject selectAdmin(AdminBean adminBean) {
         Integer admin_id = dao.hasAdminBean(adminBean);
         JSONObject data = new JSONObject();
+        data.put("status", 200);
         if (admin_id == null) {
-            data.put("status", 500);
             data.put("result", "fail");
             data.put("isSuccess", false);
+            data.put("message","账户或密码错误");
         } else {
-            data.put("status", 200);
             data.put("result", "success");
             data.put("admin_id", admin_id);
             data.put("isSuccess", true);

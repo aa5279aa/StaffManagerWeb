@@ -32,6 +32,7 @@
             :on-error="uploadFalse"
             :on-success="uploadSuccess"
             :auto-upload="false"
+            
           >
             <i class="el-icon-upload"></i>
             <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
@@ -57,7 +58,6 @@ export default {
   components: {},
   props: {},
   data() {
-    console.log('data')
     return {
       baseUrl: this.HTTPURL + 'upload_img',
       isJump: false,
@@ -109,19 +109,6 @@ export default {
       })
     },
 
-    //表单提交
-    submitUpload() {
-      this.$refs.form.validate(valid => {
-        debugger
-        if (valid) {
-          //触发组件的action
-          this.$refs.upload.submit() //主要是这里
-        } else {
-          console.log('error submit!!')
-          return false
-        }
-      })
-    },
     //表单取消
     onCancel() {
       this.$refs.form.resetFields()
@@ -134,14 +121,18 @@ export default {
       }
       console.log('account:' + JSON.stringify(params))
       //请求登录
-
+      var that = this;
       this.$apis.user
         .requestSet(params)
         .then(data => {
           debugger
-          console.log(data)
-          alert(data.result)
-          this.$router.go(-1)
+          console.log(data.message)
+          this.$message({
+            message: data.message
+          })
+          setTimeout(()=> {
+            that.$router.go(-1)
+          }, 1000)
         })
         .catch(err => {
           console.log(err)
@@ -149,7 +140,21 @@ export default {
         .finally(() => {
           this.showLoading = false
         })
-    }
+    },
+     //表单提交
+    submitUpload() {
+      if(this.fileList.length==0){
+          this.requestRegister("")
+          return;
+      }
+      this.$refs.form.validate(valid => {
+        debugger
+        if (valid) {
+          //触发组件的action
+          this.$refs.upload.submit() //主要是这里
+        }
+      })
+    },
   }
 }
 </script>

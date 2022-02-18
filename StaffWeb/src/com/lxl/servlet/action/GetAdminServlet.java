@@ -26,6 +26,8 @@ public class GetAdminServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         PrintWriter writer = response.getWriter();
+        request.setCharacterEncoding("utf-8");
+        response.setContentType("text/html;charset=utf-8");
         try {
             AdminBean adminBean = new AdminBean();
             adminBean.account = request.getParameter("account");

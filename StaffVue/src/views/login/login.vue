@@ -43,14 +43,14 @@ export default {
       //请求登录
       this.$apis.user.requestLogin(params).then(data => {
         console.log('requestLogin:', data)
-        if (data.status === 200) {
+        debugger
+        if (data.isSuccess) {
           //保存用户嘻嘻
           this.$store.commit('SET_LOGIN_MARK')
           this.$router.replace({ name: 'manager' })
         } else {
           this.$message({
-            message: data.message,
-            type: '请输入正确的账号密码'
+            message: '请输入正确的账号密码',
           })
         }
       })
