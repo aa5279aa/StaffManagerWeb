@@ -3,21 +3,23 @@ import { MessageBox, Message } from 'element-ui'
 import store from '@/store'
 // import { getToken } from '@/utils/auth'
 import { decryptByDES } from '@/utils/utils'
+import Vue from 'vue'
+
+debugger
+Vue.prototype.IS_PROD = true
+Vue.prototype.VUE_URL = Vue.prototype.IS_PROD ? 'http://47.242.116.166/staff/?#/' : 'http://localhost:9021/staff/?#/'
+Vue.prototype.SERVE_URL = Vue.prototype.IS_PROD ? 'http://47.242.116.166:8080/staff/' : 'http://localhost:8080/staff/'
 
 // create an axios instance
 const service = axios.create({
-  // baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
-  // baseURL: 'http://yapi.mft100.cn/mock/37', // url = base url + request url
-  // baseURL: process.env.NODE_ENV === 'production' ? 'http://localhost:8080/staff/' : '/proxyApi', // url = base url + request url
-  // baseURL: 'http://localhost:8080/staff/',
-  baseURL: 'http://47.242.116.166:8080/staff/',
-  // withCredentials: true, // send cookies when cross-domain requests
+  baseURL: Vue.prototype.SERVE_URL,
   timeout: 15000 // request timeout
 })
 
 // request interceptor
 service.interceptors.request.use(
   config => {
+    debugger
     // do something before request is sent
     return config
   },

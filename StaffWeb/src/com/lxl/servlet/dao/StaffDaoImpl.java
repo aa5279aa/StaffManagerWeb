@@ -59,6 +59,7 @@ public class StaffDaoImpl implements StaffDao {
             pstmt.setString(5, accountBean.describes);
             pstmt.setString(6, accountBean.imgUrl);
             pstmt.setString(7, accountBean.remark);
+            pstmt.setString(8, accountBean.department);
             return pstmt.executeUpdate() > 0;
         } catch (Exception e) {
             e.printStackTrace();
@@ -120,6 +121,7 @@ public class StaffDaoImpl implements StaffDao {
                 String describes = rs.getString("describes");
                 String img_url = rs.getString("img_url");
                 String remark = rs.getString("remark");
+                String department = rs.getString("department");
                 Timestamp createTime = rs.getTimestamp("create_time");
                 Timestamp updateTime = rs.getTimestamp("update_time");
 
@@ -135,6 +137,7 @@ public class StaffDaoImpl implements StaffDao {
                 accountBean.remark = remark;
                 accountBean.createTime = createTime;
                 accountBean.updateTime = updateTime;
+                accountBean.department = department;
 
                 list.add(accountBean);
             }

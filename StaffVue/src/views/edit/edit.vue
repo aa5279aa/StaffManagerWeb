@@ -6,23 +6,18 @@
         <b>员工{{ accountInfo.accountId != undefined ? '修改' : '新增' }}</b>
       </p>
       <p v-show="accountInfo.accountId != undefined">编号: {{ accountInfo.accountId }}</p>
-      <p>工号: <input type="text" v-model="accountInfo.jobId" /></p>
-      <p>姓名: <input type="text" v-model="accountInfo.account" /></p>
-      <p>入职日期: <input type="text" v-model="accountInfo.entryDate" /></p>
-      <p>职位：<input type="text" v-model="accountInfo.position" /></p>
-      <p>简介: <input type="text" v-model="accountInfo.describes" /></p>
-      <p>备注: <input type="text" v-model="accountInfo.remark" /></p>
+      <p><label>工号：</label><input type="text" v-model="accountInfo.jobId" /></p>
+      <p><label>姓名：</label><input type="text" v-model="accountInfo.account" /></p>
+      <p><label>入职日期：</label><input type="text" v-model="accountInfo.entryDate" /></p>
+      <p><label>部门：</label><input type="text" v-model="accountInfo.department" /></p>
+      <p><label>职位：</label><input type="text" v-model="accountInfo.position" /></p>
+      <p><label>简介：</label><input type="text" v-model="accountInfo.describes" /></p>
+      <p><label>备注：</label> <input type="text" v-model="accountInfo.remark" /></p>
 
-      <el-form
-        ref="form"
-        label-position="left"
-        :model="form"
-        label-width="80px"
-        style="margin: 20px; width: 60%; min-width: 600px"
-      >
-        <el-form-item label="上传文件" prop="excelFile">
+      <el-form ref="form" label-position="left" :model="form" class="el-form">
+        <el-form-item label="上传文件:" prop="excelFile">
           <el-upload
-            class="upload-demo"
+            class="el-upload"
             ref="upload"
             :action="this.SERVE_URL + 'upload_img'"
             name="excelFile"
@@ -39,15 +34,12 @@
             <!-- <el-button slot="trigger" size="small" >选取文件</el-button> -->
           </el-upload>
         </el-form-item>
-
-        <!-- <el-form-item>
-          <el-button type="primary" @click="submitUpload(form)">导入</el-button>
-         
-        </el-form-item> -->
       </el-form>
-
-      <!-- <p>头像: <input type="file" id="files" ref="refFile" multiple="multiple" v-on:change="fileLoad" /></p> -->
-      <button @click="submitUpload">提交</button>
+      <div class="button-view">
+        <!-- <p>头像: <input type="file" id="files" ref="refFile" multiple="multiple" v-on:change="fileLoad" /></p> -->
+        <button @click="submitUpload">提交</button>
+        <button @click="closePage">关闭</button>
+      </div>
     </div>
   </div>
 </template>
@@ -59,7 +51,7 @@ export default {
   props: {},
   data() {
     return {
-      baseUrl: this.HTTPURL + 'upload_img',
+      baseUrl: this.SERVE_URL + 'upload_img',
       isJump: false,
       accountInfo: {},
       imageUrl: '',
@@ -88,6 +80,7 @@ export default {
     },
     //文件上传成功触发
     uploadSuccess(response) {
+      debugger
       console.log(response)
       if (response.data.status == 200) {
         // this.$message({
@@ -104,6 +97,7 @@ export default {
     },
     //文件上传失败触发
     uploadFalse() {
+      debugger
       this.$message({
         message: '文件上传失败！',
         type: 'error'
@@ -156,6 +150,9 @@ export default {
           this.$refs.upload.submit() //主要是这里
         }
       })
+    },
+    closePage() {
+      this.$router.go(-1)
     }
   }
 }
@@ -184,20 +181,23 @@ export default {
   border: 1px solid #000;
   padding: 50px;
   p {
-    width: 60%;
-    margin-left: 20%;
-
     display: flex;
     flex-direction: row;
     justify-content: left;
+    label {
+      width: 100px;
+      text-align: right;
+    }
+    input {
+      width: 400px;
+    }
     b {
       width: 100%;
     }
   }
-  button {
-    width: 40%;
-    height: 30px;
-    margin-left: 30%;
+  .el-form {
+    padding-left: 30px;
+    margin-top: 10px;
   }
   .avatar-uploader el-upload {
     border: 1px dashed #d9d9d9;
@@ -221,6 +221,20 @@ export default {
     width: 178px;
     height: 178px;
     display: block;
+  }
+}
+.button-view {
+  display: flex;
+  flex-direction: row;
+  padding-left: 20%;
+  padding-right: 20%;
+  width: 100%;
+  align-content: flex-start;
+  justify-content: space-between;
+  align-items: flex-start;
+  button {
+    font-size: 15px;
+    padding: 10px 30px 10px 30px;
   }
 }
 </style>

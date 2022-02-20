@@ -1,10 +1,8 @@
-const IS_PROD = ['production', 'prod'].includes(process.env.NODE_ENV)
-
 module.exports = {
   publicPath: './',
   // outputDir: process.env.outputDir || 'dist', // 'dist', 生产环境构建文件的目录
   // assetsDir: "", // 相对于outputDir的静态资源(js、css、img、fonts)目录
-  productionSourceMap: !IS_PROD, // 生产环境的 source map
+  productionSourceMap: false, // 生产环境的 source map
   parallel: require('os').cpus().length > 1,
   devServer: {
     port: 9020, // 端口
@@ -26,7 +24,7 @@ module.exports = {
     }
   },
   css: {
-    extract: IS_PROD, // 是否将组件中的 CSS 提取至一个独立的 CSS 文件中 (而不是动态注入到 JavaScript 中的 inline 代码)。
+    extract: true, // 是否将组件中的 CSS 提取至一个独立的 CSS 文件中 (而不是动态注入到 JavaScript 中的 inline 代码)。
     sourceMap: false,
     loaderOptions: {
       scss: {

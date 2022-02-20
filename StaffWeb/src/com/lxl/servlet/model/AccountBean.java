@@ -24,6 +24,7 @@ public class AccountBean {
     public String jobId;
     public String account;
     public String entryDate;
+    public String department;
     public String position;//
     public String describes;
     public String imgUrl;

@@ -15,7 +15,6 @@
 </template>
 
 <script>
-
 export default {
   props: {
     item: {
@@ -58,11 +57,11 @@ export default {
     },
 
     goToQr() {
-      console.log("this.HTTPURL:"+ this.HTTPURL)
-      var myUrl = this.HTTPURL+"select?accountId="+this.item.accountId
-      var url = "	https://api.pwmqr.com/qrcode/create/?url="+ encodeURIComponent(myUrl)
+      var myUrl = this.VUE_URL + 'select?accountId=' + this.item.accountId
+      console.log('myUrl:' + myUrl)
+      var url = '	https://api.pwmqr.com/qrcode/create/?url=' + encodeURIComponent(myUrl)
       console.log(url)
-      window.open(url, '_blank');
+      window.open(url, '_blank')
       // this.$router.push({
       //   name: 'showqr',
       //   params: {

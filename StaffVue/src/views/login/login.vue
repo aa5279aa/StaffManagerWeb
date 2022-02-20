@@ -33,6 +33,7 @@ export default {
      * 扫码登录回调,拿到code, 发起登录
      */
     requestLogin() {
+      debugger
       const params = {
         account: this.$refs.account.value,
         password: this.$refs.password.value
@@ -44,6 +45,7 @@ export default {
         debugger
         if (data.isSuccess) {
           //保存用户嘻嘻
+          console.log('store:' + this.$store)
           this.$store.commit('SET_LOGIN_MARK')
           this.$router.replace({ name: 'manager' })
         } else {

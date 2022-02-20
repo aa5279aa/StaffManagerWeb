@@ -5,14 +5,16 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    userInfo: JSON.parse(localStorage.getItem('userInfo') || 'null')
+    isLogin: localStorage.getItem('isLogin')
   },
   mutations: {
     SET_TOKEN() {},
 
     // 设置存储用户已登录标识
     SET_LOGIN_MARK(state) {
+      debugger
       state.isLogin = true
+      console.log('SET_LOGIN_MARK.state.isLogin:' + state.isLogin)
       localStorage.setItem('isLogin', true)
     },
 

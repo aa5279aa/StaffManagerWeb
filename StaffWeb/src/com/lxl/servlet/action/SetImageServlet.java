@@ -3,6 +3,7 @@ package com.lxl.servlet.action;
 import com.alibaba.fastjson.JSONObject;
 import com.lxl.servlet.model.ImageModel;
 import com.lxl.servlet.service.InputService;
+import com.lxl.servlet.service.Logger;
 import com.lxl.servlet.util.ServletUtil;
 import org.apache.commons.fileupload.FileItem;
 
@@ -21,6 +22,7 @@ import java.util.List;
 @WebServlet(name = "InputImageServlet")
 public class SetImageServlet extends HttpServlet {
     InputService inputService = new InputService();
+    Logger logger = Logger.getLogger();
 
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -48,6 +50,7 @@ public class SetImageServlet extends HttpServlet {
         } catch (Exception e) {
             writer.write("error");
             e.printStackTrace();
+            logger.showMessage(e.getMessage());
         }
         //成功+连接
         writer.flush();
