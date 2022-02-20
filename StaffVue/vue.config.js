@@ -1,7 +1,7 @@
 const IS_PROD = ['production', 'prod'].includes(process.env.NODE_ENV)
 
 module.exports = {
-  publicPath: '/StaffVue/',
+  publicPath: './',
   // outputDir: process.env.outputDir || 'dist', // 'dist', 生产环境构建文件的目录
   // assetsDir: "", // 相对于outputDir的静态资源(js、css、img、fonts)目录
   productionSourceMap: !IS_PROD, // 生产环境的 source map
@@ -17,7 +17,7 @@ module.exports = {
     proxy: {
       //配置跨域
       '/proxyApi': {
-        target: 'http://localhost:8080/staff',
+        target: 'http://47.242.116.166:8080/staff',
         changOrigin: true,
         pathRewrite: {
           '^/proxyApi': '/'

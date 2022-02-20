@@ -58,13 +58,16 @@ public class InputService {
 
         if (realPath.contains("out")) {
             //开发环境
+            System.out.println("debug,realPath:"+realPath);
             ///Users/liuxl1/develop/git_ware/waibao/StaffManagerWeb/StaffWeb/out/artifacts/staff/
             imageModel.mImgPath = realPath + "img/" + imageModel.mImgName;
+            imageModel.mImgUrl = Config.SERVE_URL_DEBUG + "/img/" + imageModel.mImgName;
         } else {
             //服务器部署
+            System.out.println("release,realPath:"+realPath);
             imageModel.mImgPath = realPath + "img/" + imageModel.mImgName;
+            imageModel.mImgUrl = Config.SERVE_URL_RELEASE + "/img/" + imageModel.mImgName;
         }
-        imageModel.mImgUrl = "http://localhost:8080/staff/img/" + imageModel.mImgName;
 
         //转存图片
         File saveImgFile = new File(imageModel.mImgPath);

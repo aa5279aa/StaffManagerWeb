@@ -8,7 +8,9 @@ import { decryptByDES } from '@/utils/utils'
 const service = axios.create({
   // baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
   // baseURL: 'http://yapi.mft100.cn/mock/37', // url = base url + request url
-  baseURL: process.env.NODE_ENV === 'production' ? 'http://localhost:8080/staff/' : '/proxyApi', // url = base url + request url
+  // baseURL: process.env.NODE_ENV === 'production' ? 'http://localhost:8080/staff/' : '/proxyApi', // url = base url + request url
+  // baseURL: 'http://localhost:8080/staff/',
+  baseURL: 'http://47.242.116.166:8080/staff/',
   // withCredentials: true, // send cookies when cross-domain requests
   timeout: 15000 // request timeout
 })

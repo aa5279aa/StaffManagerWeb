@@ -17,7 +17,7 @@ public class StaffDaoImpl implements StaffDao {
     public StaffDaoImpl() {
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            String url = "jdbc:mysql://localhost:3306/staff?useUnicode=true&characterEncoding=utf8";
+            String url = "jdbc:mysql://localhost:3306/staff?useUnicode=true&characterEncoding=utf8&autoReconnect=true";
             String user = "admin1";
             String password = "lxl301lxl";
             conn = DriverManager.getConnection(url, user, password);

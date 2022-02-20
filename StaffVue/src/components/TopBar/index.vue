@@ -13,7 +13,7 @@
     <!-- <span>下载币：88</span> -->
     <img class="time-pic" src="../../assets/image/time.png" />
     <span class="time-box">{{ userInfo.todayDate }}</span>
-    <img class="user-pic" :src="userInfo.headImgUrl" alt="" />
+    <img class="user-pic" src="../../assets/image/admin_icon.png" alt="" />
     <span class="userinfo">{{ userInfo.uname + ' ' + userInfo.uphone }}</span>
     <!-- </template> -->
     <el-button class="log-out" size="mini" @click="logOut">退出登录</el-button>

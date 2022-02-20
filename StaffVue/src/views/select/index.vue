@@ -1,16 +1,17 @@
 <template>
-  <div v-loading="showLoading" class="login-view">
+  <div class="login-view">
+    <b>员工信息</b>
     <div class="login-form">
-      <p><b>员工信息</b></p>
-      <div>
-        <p v-text="'编号：' + accountInfo.accountId"></p>
-        <p v-text="'姓名：' + accountInfo.accountName"></p>
-        <p v-text="'工号：' + accountInfo.jobId"></p>
-        <p v-text="'入职日期：' + accountInfo.entryDate"></p>
-        <p v-text="'职位：' + accountInfo.position"></p>
-        <p v-text="'描述：' + accountInfo.describes"></p>
-        <p v-text="'备注：' + accountInfo.remark"></p>
-        <img v-show="accountInfo.imgUrl.startsWith('http')" class="default-image" :src="accountInfo.imgUrl" onerror="../assets/image/coin.png"/>
+      <p><b>姓名：</b>{{ accountInfo.account }}</p>
+      <p><b>编号：</b>{{ accountInfo.accountId }}</p>
+      <p><b>工号：</b>{{ accountInfo.jobId }}</p>
+      <p><b>职位：</b>{{ accountInfo.position }}</p>
+      <p><b>个人简介：</b></p>
+      <p>{{ accountInfo.describes }}</p>
+      <br />
+      <div class="imgae" v-show="accountInfo.imgUrl.substr(0, 4) == 'http'">
+        <p><b>个人风采:</b></p>
+        <img alt="图片" :src="accountInfo.imgUrl" style="width: 835px; height: 835px" />
       </div>
     </div>
   </div>
@@ -21,7 +22,6 @@ export default {
   components: {},
   data() {
     return {
-      
       showLoading: false,
       accountInfo: {
         accountId: 1001,
@@ -33,8 +33,12 @@ export default {
   created() {
     debugger
     var accountInfo = this.$route.params
-    this.accountInfo = accountInfo
-    
+    if (accountInfo.accountId != undefined) {
+      this.accountInfo = accountInfo
+      return
+    }
+    const accountId = this.$route.query.accountId
+    this.selectAccountInfo(accountId)
   },
   mounted() {},
   watch: {
@@ -43,6 +47,16 @@ export default {
     }
   },
   methods: {
+    selectAccountInfo(accountId) {
+      const params = {
+        accountList: accountId
+      }
+      this.$apis.user.requestSelect(params).then(data => {
+        debugger
+        console.log('requestSelect:', data)
+        this.accountInfo = data.accountList[0]
+      })
+    },
     clickClose() {
       this.$router.go(-1)
     }
@@ -51,21 +65,18 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
 .login-view {
+  padding-top: 10px;
   width: 100%;
   height: 100%;
-  box-sizing: border-box;
   text-align: center;
   // background-color: rgb(51, 51, 51);
   background-color: #fff;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   justify-items: center;
   align-items: center;
 }
-
 
 .login-form {
   display: flex;
@@ -73,23 +84,31 @@ export default {
   justify-content: left;
   justify-items: left;
   width: 50%;
-  border: 1px solid #000;
-  padding: 50px;
-  p {
-    width: 60%;
-    margin-left: 20%;
+  margin-top: 10px;
 
+  p {
+    margin: 0;
+    width: 60%;
     display: flex;
     flex-direction: row;
     justify-content: left;
-    b {
-      width: 100%;
+    line-height: 30px;
+  }
+
+  .imgae {
+    display: flex;
+    justify-items: left;
+    flex-direction: column;
+    justify-content: left;
+    align-items: left;
+
+    margin: 0;
+    p {
+      margin: 0;
     }
   }
-  button {
-    width: 40%;
-    height: 30px;
-    margin-left: 30%;
-  }
+}
+.color {
+  background-color: aqua;
 }
 </style>

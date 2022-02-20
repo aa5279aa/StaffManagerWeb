@@ -9,8 +9,8 @@
     <!-- 右侧 -->
     <div class="right-content">
       <div class="action-content">
-        <button @click="addAccount">新增</button>
-        <button>无</button>
+        <button @click="addAccount">新增员工</button>
+        <!-- <button>无</button> -->
       </div>
 
       <div>

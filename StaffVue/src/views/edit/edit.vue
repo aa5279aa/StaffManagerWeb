@@ -7,7 +7,7 @@
       </p>
       <p v-show="accountInfo.accountId != undefined">编号: {{ accountInfo.accountId }}</p>
       <p>工号: <input type="text" v-model="accountInfo.jobId" /></p>
-      <p>账户名: <input type="text" v-model="accountInfo.account" /></p>
+      <p>姓名: <input type="text" v-model="accountInfo.account" /></p>
       <p>入职日期: <input type="text" v-model="accountInfo.entryDate" /></p>
       <p>职位：<input type="text" v-model="accountInfo.position" /></p>
       <p>简介: <input type="text" v-model="accountInfo.describes" /></p>
@@ -28,11 +28,11 @@
             name="excelFile"
             drag
             :data="upData"
+            :on-change="onUploadChange"
             :file-list="fileList"
             :on-error="uploadFalse"
             :on-success="uploadSuccess"
             :auto-upload="false"
-            
           >
             <i class="el-icon-upload"></i>
             <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
@@ -77,16 +77,17 @@ export default {
     }
   },
   created() {
-    // debugger
     var accountInfo = this.$route.params
     this.accountInfo = accountInfo
   },
 
   mounted() {},
   methods: {
+    onUploadChange(file) {
+      this.fileList.push(file)
+    },
     //文件上传成功触发
     uploadSuccess(response) {
-      debugger
       console.log(response)
       if (response.data.status == 200) {
         // this.$message({
@@ -121,7 +122,7 @@ export default {
       }
       console.log('account:' + JSON.stringify(params))
       //请求登录
-      var that = this;
+      var that = this
       this.$apis.user
         .requestSet(params)
         .then(data => {
@@ -130,7 +131,7 @@ export default {
           this.$message({
             message: data.message
           })
-          setTimeout(()=> {
+          setTimeout(() => {
             that.$router.go(-1)
           }, 1000)
         })
@@ -141,11 +142,12 @@ export default {
           this.showLoading = false
         })
     },
-     //表单提交
+    //表单提交
     submitUpload() {
-      if(this.fileList.length==0){
-          this.requestRegister("")
-          return;
+      debugger
+      if (this.fileList.length == 0) {
+        this.requestRegister('')
+        return
       }
       this.$refs.form.validate(valid => {
         debugger
@@ -154,7 +156,7 @@ export default {
           this.$refs.upload.submit() //主要是这里
         }
       })
-    },
+    }
   }
 }
 </script>
