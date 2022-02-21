@@ -1,7 +1,6 @@
 .idea/
 out/
-ShoppingWeb.iml
 META-INF/MANIFEST.MF
 /decoder-data/
 web/WEB-INF/classes/
-StaffWeb.iml
+*.iml

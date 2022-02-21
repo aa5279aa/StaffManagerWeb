@@ -7,7 +7,7 @@ import Vue from 'vue'
 
 debugger
 Vue.prototype.IS_PROD = true
-Vue.prototype.VUE_URL = Vue.prototype.IS_PROD ? 'http://47.242.116.166/staff/?#/' : 'http://localhost:9021/staff/?#/'
+Vue.prototype.VUE_URL = Vue.prototype.IS_PROD ? 'http://47.242.116.166/?#/' : 'http://localhost:9020/staff/?#/'
 Vue.prototype.SERVE_URL = Vue.prototype.IS_PROD ? 'http://47.242.116.166:8080/staff/' : 'http://localhost:8080/staff/'
 
 // create an axios instance

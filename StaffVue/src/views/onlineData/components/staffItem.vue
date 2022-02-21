@@ -1,11 +1,13 @@
 <template>
   <div class="data-item-wrap">
-    <div class="title">编号：{{ item.accountId }}</div>
-    <div class="label-wrap">
-      <span>工号:{{ item.jobId }}</span>
-      <span>姓名:{{ item.account }}</span>
+    <div class="left-options">
+      <span>编号：{{ item.accountId }}</span>
+      <div class="label-wrap">
+        <span>工号:{{ item.jobId }}</span>
+        <span>姓名:{{ item.account }}</span>
+      </div>
     </div>
-    <div class="options-wrap">
+    <div class="right-options">
       <div @click="goToEdit">编辑</div>
       <div @click="goToSelect">查看</div>
       <div @click="clickDelete">删除</div>
@@ -75,49 +77,51 @@ export default {
 
 <style lang="scss" scoped>
 .data-item-wrap {
-  min-height: 84px;
   background: #ffffff;
   border-radius: 2px;
   padding: 14px 18px 0;
   border-bottom: 1px solid #eeeeee;
   position: relative;
-  .title {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  .left-options {
     font-size: 16px;
     font-family: PingFangSC-Regular, PingFang SC;
     font-weight: 400;
     color: #333333;
     line-height: 22px;
     margin-bottom: 6px;
-  }
-  .label-wrap {
-    font-size: 0;
-    font-family: PingFangSC-Regular, PingFang SC;
-    font-weight: 400;
-    color: #3382ff;
-    line-height: 17px;
-    max-width: calc(100% - 280px);
-    display: flex;
-    flex-wrap: wrap;
-    margin-bottom: 6px;
-    span {
-      font-size: 12px;
-      padding: 0 5px;
-      border-radius: 3px;
-      border: 1px solid #3382ff;
-      margin-right: 9px;
-      margin-top: 6px;
+    .label-wrap {
+      font-size: 0;
+      font-family: PingFangSC-Regular, PingFang SC;
+      font-weight: 400;
+      color: #3382ff;
+      line-height: 17px;
+      display: flex;
+      margin-bottom: 6px;
+      span {
+        font-size: 12px;
+        padding: 0 5px;
+        border-radius: 3px;
+        border: 1px solid #3382ff;
+        margin-right: 9px;
+        margin-top: 6px;
+      }
     }
   }
-  .options-wrap {
-    position: absolute;
-    bottom: 16px;
-    right: 18px;
-    width: 360px;
+
+  .right-options {
+    width: 40%;
+    padding: 10px;
     display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
     justify-content: flex-end;
     div {
       margin-right: 10px;
-      width: 120px;
+      width: 80px;
       height: 24px;
       line-height: 22px;
       float: left;

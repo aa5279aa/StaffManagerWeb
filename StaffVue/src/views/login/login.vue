@@ -73,8 +73,8 @@ export default {
   padding: 50px;
 }
 .login-form {
-  width: 30%;
-  height: 30%;
+  width: 400px;
+  height: 300px;
   border: 1px solid #000;
 }
 </style>

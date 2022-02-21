@@ -16,11 +16,6 @@ public class StaffDaoImpl implements StaffDao {
 
     public StaffDaoImpl() {
         try {
-            Class.forName("com.mysql.jdbc.Driver");
-            String url = "jdbc:mysql://localhost:3306/staff?useUnicode=true&characterEncoding=utf8&autoReconnect=true";
-            String user = "admin1";
-            String password = "lxl301lxl";
-            conn = DriverManager.getConnection(url, user, password);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -33,15 +28,16 @@ public class StaffDaoImpl implements StaffDao {
 
         if (accountBean.accountId == 0) {
             //插入
-            sql.append("INSERT INTO " + ACCOUNT_TABLE + " ( job_id,account, entry_data,position,describes,img_url,remark )" +
+            sql.append("INSERT INTO " + ACCOUNT_TABLE + " ( job_id,account, entry_data,department,position,describes,img_url,remark )" +
                     "VALUES " +
-                    "(?,?,?,?,?,?,?);");
+                    "(?,?,?,?,?,?,?,?);");
         } else {
             //修改
             sql.append("UPDATE " + ACCOUNT_TABLE + " SET ");
             sql.append(" job_id =?,");
             sql.append(" account =?,");
             sql.append(" entry_data =?,");
+            sql.append(" department =?,");
             sql.append(" position =?,");
             sql.append(" describes =?,");
             sql.append(" img_url =?,");
@@ -51,15 +47,15 @@ public class StaffDaoImpl implements StaffDao {
 
         PreparedStatement pstmt = null;
         try {
-            pstmt = conn.prepareStatement(sql.toString());
+            pstmt = getConn().prepareStatement(sql.toString());
             pstmt.setString(1, accountBean.jobId);
             pstmt.setString(2, accountBean.account);
             pstmt.setString(3, accountBean.entryDate);
-            pstmt.setString(4, accountBean.position);
-            pstmt.setString(5, accountBean.describes);
-            pstmt.setString(6, accountBean.imgUrl);
-            pstmt.setString(7, accountBean.remark);
-            pstmt.setString(8, accountBean.department);
+            pstmt.setString(4, accountBean.department);
+            pstmt.setString(5, accountBean.position);
+            pstmt.setString(6, accountBean.describes);
+            pstmt.setString(7, accountBean.imgUrl);
+            pstmt.setString(8, accountBean.remark);
             return pstmt.executeUpdate() > 0;
         } catch (Exception e) {
             e.printStackTrace();
@@ -81,7 +77,7 @@ public class StaffDaoImpl implements StaffDao {
         String sql = "delete from " + ACCOUNT_TABLE + " where account_id =" + accountId;
         Statement stmt = null;
         try {
-            stmt = conn.createStatement();
+            stmt = getConn().createStatement();
             return stmt.executeUpdate(sql) > 0;
         } catch (Exception e) {
             e.printStackTrace();
@@ -101,14 +97,14 @@ public class StaffDaoImpl implements StaffDao {
     public List<AccountBean> selectAccountBen(String accountIdList, int start, int maxNum) {
         StringBuilder sql = new StringBuilder();
         if (accountIdList == null || accountIdList.length() == 0) {
-            sql.append( "select * from account_table limit " + maxNum + ";");
+            sql.append("select * from account_table limit " + maxNum + ";");
         } else {
             sql.append("select * from account_table where account_id in (" + accountIdList + ") limit " + maxNum + ";");
         }
         PreparedStatement preStmt = null;
         List<AccountBean> list = new ArrayList<>();
         try {
-            preStmt = conn.prepareStatement(sql.toString());
+            preStmt = getConn().prepareStatement(sql.toString());
             ResultSet rs = preStmt.executeQuery();
 
             while (rs.next()) {
@@ -161,7 +157,7 @@ public class StaffDaoImpl implements StaffDao {
         String sql = "select * from " + ADMIN_TABLE + " where account = \'" + adminBean.account + "\' and password =\'" + adminBean.password + "\'";
         PreparedStatement preStmt = null;
         try {
-            preStmt = conn.prepareStatement(sql);
+            preStmt = getConn().prepareStatement(sql);
             ResultSet rs = preStmt.executeQuery();
             while (rs.next()) {
                 int admin_id = rs.getInt("admin_id");
@@ -201,5 +197,34 @@ public class StaffDaoImpl implements StaffDao {
         return null;
     }
 
+    public Connection getConn() {
+
+        if (conn == null) {
+            conn = createConn();
+            return conn;
+        }
+        try {
+            if (conn.isValid(8 * 3600)) {
+                return conn;
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        conn = createConn();
+        return conn;
+    }
+
+    private Connection createConn() {
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            String url = "jdbc:mysql://localhost:3306/staff?useUnicode=true&characterEncoding=utf8&autoReconnect=true";
+            String user = "admin1";
+            String password = "lxl301lxl";
+            return DriverManager.getConnection(url, user, password);
+        } catch (Exception e) {
+
+        }
+        return null;
+    }
 
 }

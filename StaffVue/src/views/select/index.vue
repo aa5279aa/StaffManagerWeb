@@ -9,9 +9,9 @@
       <p><b>个人简介：</b></p>
       <p>{{ accountInfo.describes }}</p>
       <br />
-      <div class="imgae" v-show="accountInfo.imgUrl.substr(0, 4) == 'http'">
+      <div class="imgae" v-show="accountInfo.imgUrl!=undefined && accountInfo.imgUrl.substr(0, 4) == 'http'">
         <p><b>个人风采:</b></p>
-        <img alt="图片" :src="accountInfo.imgUrl" style="width: 835px; height: 835px" />
+        <img alt="图片" :src="accountInfo.imgUrl" style="width: 80%;" />
       </div>
     </div>
   </div>
@@ -23,10 +23,7 @@ export default {
   data() {
     return {
       showLoading: false,
-      accountInfo: {
-        accountId: 1001,
-        account: 'liuyu'
-      }
+      accountInfo: {}
     }
   },
   computed: {},
