@@ -1,7 +1,6 @@
 import request from '@/utils/request'
 
 export function requestLogin(data) {
-  debugger
   return request({
     url: '/admin_select',
     method: 'post',

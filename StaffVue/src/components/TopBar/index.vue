@@ -37,10 +37,10 @@ export default {
   },
   created() {
     this.initTopBar()
-    this.requestUserInfo()
   },
   methods: {
     initTopBar() {
+
       const self = this
       const resizeHandler = _.debounce(function () {
         self.fullscreenMode = document.documentElement.clientWidth > 1440
@@ -48,17 +48,6 @@ export default {
       window.addEventListener('resize', resizeHandler)
       this.$once('hook:beforeDestroy', () => {
         window.removeEventListener('resize', resizeHandler)
-      })
-    },
-
-    requestUserInfo() {
-      if (this.$store.state.token == undefined || this.$store.state.token == '') {
-        return
-      }
-      this.$apis.user.requestUserInfo().then(res => {
-        const data = res.data
-        this.$store.commit('SET_USER_INFO', data)
-        this.userInfo = data
       })
     },
 

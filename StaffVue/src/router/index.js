@@ -6,10 +6,18 @@ Vue.use(VueRouter)
 
 const routes = [
   {
+    path: '/',
+    name: 'login',
+    component: () => import('../views/login/login.vue'),
+    meta: { title: '登录' }
+
+  },
+  {
     path: '/login',
     name: 'login',
     component: () => import('../views/login/login.vue'),
     meta: { title: '登录' }
+
   },
   {
     path: '/manager',

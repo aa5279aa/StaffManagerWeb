@@ -5,9 +5,8 @@ import store from '@/store'
 import { decryptByDES } from '@/utils/utils'
 import Vue from 'vue'
 
-debugger
 Vue.prototype.IS_PROD = true
-Vue.prototype.VUE_URL = Vue.prototype.IS_PROD ? 'http://47.242.116.166/?#/' : 'http://localhost:9020/staff/?#/'
+Vue.prototype.VUE_URL = Vue.prototype.IS_PROD ? 'http://www.jdjrhd.com/?#/' : 'http://localhost:9020/staff/?#/'
 Vue.prototype.SERVE_URL = Vue.prototype.IS_PROD ? 'http://47.242.116.166:8080/staff/' : 'http://localhost:8080/staff/'
 
 // create an axios instance
@@ -19,7 +18,6 @@ const service = axios.create({
 // request interceptor
 service.interceptors.request.use(
   config => {
-    debugger
     // do something before request is sent
     return config
   },

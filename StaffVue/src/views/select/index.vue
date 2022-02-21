@@ -5,6 +5,7 @@
       <p><b>姓名：</b>{{ accountInfo.account }}</p>
       <p><b>编号：</b>{{ accountInfo.accountId }}</p>
       <p><b>工号：</b>{{ accountInfo.jobId }}</p>
+      <p><b>部门</b>{{ accountInfo.department }}</p>
       <p><b>职位：</b>{{ accountInfo.position }}</p>
       <p><b>个人简介：</b></p>
       <p>{{ accountInfo.describes }}</p>
@@ -13,6 +14,7 @@
         <p><b>个人风采:</b></p>
         <img alt="图片" :src="accountInfo.imgUrl" style="width: 80%;" />
       </div>
+      <div><button @click="clickClose">关闭</button></div>
     </div>
   </div>
 </template>
