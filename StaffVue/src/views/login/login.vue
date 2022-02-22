@@ -1,12 +1,12 @@
 <!-- 扫码登录 -->
 <template>
   <div class="login-view">
-    <form class="login-form">
+    <div class="login-form">
       <p><b>员工管理系统</b></p>
       <p>账号: <input type="text" ref="account" /></p>
       <p>密码: <input type="text" ref="password" /></p>
-      <input type="submit" value="登录" @click="requestLogin" />
-    </form>
+      <button :value="登录" @click="requestLogin">登录</button>
+    </div>
   </div>
 </template>
 
@@ -39,7 +39,7 @@ export default {
         password: this.$refs.password.value
       }
       console.log('account:' + params.account)
-      //请求登录
+      
       this.$apis.user.requestLogin(params).then(data => {
         console.log('requestLogin:', data)
         debugger
