@@ -1,21 +1,17 @@
 package com.lxl.servlet.model;
 
-import org.apache.commons.fileupload.FileItem;
+import com.alibaba.fastjson.annotation.JSONField;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by xiangleiliu on 2017/5/25.
  */
 public class ImageModel {
-    public static final int IMAGE_MODEL_TYPE_SHOP = 1;
-    public static final int IMAGE_MODEL_TYPE_TRADING = 2;
+    @JSONField(serialize = false)
+    public String name = "aaa";
 
-
-    public int mImgId;
-    public String mImgName;
-    public String mImgPath;//相对于本机的地址
-    public String mImgUrl;//网络连接
-    public int mType;//类型
-
-    public FileItem fileItem;
+    public List<ImgFile> fileItems = new ArrayList<>();
 
 }

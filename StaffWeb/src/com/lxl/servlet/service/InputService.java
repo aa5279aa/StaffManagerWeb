@@ -1,11 +1,10 @@
 package com.lxl.servlet.service;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.lxl.servlet.config.Config;
 import com.lxl.servlet.model.ImageModel;
-import com.lxl.servlet.model.AccountBean;
-import com.lxl.servlet.util.IOHelper;
-import com.lxl.servlet.util.NumberUtil;
+import com.lxl.servlet.model.ImgFile;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItem;
@@ -30,17 +29,20 @@ public class InputService {
     //请求转化为ImgeModel
     public ImageModel readImageModel(List<FileItem> list) throws FileUploadException, IOException {
         ImageModel imageModel = new ImageModel();
+        int i = 0;
         for (FileItem fileItem : list) {
             if (!(fileItem instanceof DiskFileItem)) {
                 continue;
             }
             String name = fileItem.getName();
+
             if (name == null || name.length() == 0) {
-                continue;
+                name = "IMG" + i++;
             }
-            imageModel.mImgName = "Img_" + System.currentTimeMillis() + "_" + name;
-            imageModel.fileItem = fileItem;
-            break;
+            ImgFile imgFile = new ImgFile();
+            imgFile.imgName = "Img_" + System.currentTimeMillis() + "_" + name;
+            imgFile.fileItem = fileItem;
+            imageModel.fileItems.add(imgFile);
         }
         return imageModel;
     }
@@ -56,32 +58,34 @@ public class InputService {
     public JSONObject saveImage(ImageModel imageModel, String realPath) throws Exception {
         JSONObject data = new JSONObject();
 
+        String path = realPath + "img/";
+        String url = Config.SERVE_URL_RELEASE + "/img/";
         if (realPath.contains("out")) {
             //开发环境
-            System.out.println("debug,realPath:"+realPath);
-            ///Users/liuxl1/develop/git_ware/waibao/StaffManagerWeb/StaffWeb/out/artifacts/staff/
-            imageModel.mImgPath = realPath + "img/" + imageModel.mImgName;
-            imageModel.mImgUrl = Config.SERVE_URL_DEBUG + "/img/" + imageModel.mImgName;
-        } else {
-            //服务器部署
-            System.out.println("release,realPath:"+realPath);
-            imageModel.mImgPath = realPath + "img/" + imageModel.mImgName;
-            imageModel.mImgUrl = Config.SERVE_URL_RELEASE + "/img/" + imageModel.mImgName;
+            path = realPath + "img/";
+            url = Config.SERVE_URL_DEBUG + "/img/";
         }
-
-        //转存图片
-        File saveImgFile = new File(imageModel.mImgPath);
-        if (!saveImgFile.getParentFile().exists()) {
-            saveImgFile.getParentFile().mkdirs();
-        }
-        if (imageModel.fileItem != null) {
-            imageModel.fileItem.write(saveImgFile);
+        if (imageModel.fileItems.size() > 0) {
+            for (ImgFile imgFile : imageModel.fileItems) {
+                imgFile.imgPath = path + imgFile.imgName;
+                imgFile.imgUrl = url + imgFile.imgName;
+                File saveImgFile = new File(imgFile.imgPath);
+                if (!saveImgFile.getParentFile().exists()) {
+                    saveImgFile.getParentFile().mkdirs();
+                }
+                imgFile.fileItem.write(saveImgFile);
+            }
+            JSONArray imgList = new JSONArray();
+            for (ImgFile imgFile : imageModel.fileItems) {
+                JSONObject imgJson = new JSONObject();
+                imgJson.put("imgName", imgFile.imgName);
+                imgJson.put("imgPath", imgFile.imgPath);
+                imgJson.put("imgUrl", imgFile.imgUrl);
+                imgList.add(imgJson);
+            }
             data.put("status", 200);
-            data.put("imgPath", imageModel.mImgPath);
-            data.put("imgUrl", imageModel.mImgUrl);
+            data.put("imgList", imgList);
         } else {
-            File error = new File(saveImgFile.getAbsolutePath() + ".fail");
-            saveImgFile.renameTo(error);
             data.put("status", 500);
         }
         return data;

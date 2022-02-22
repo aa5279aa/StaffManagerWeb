@@ -10,9 +10,10 @@
       <p><b>个人简介：</b></p>
       <p>{{ accountInfo.describes }}</p>
       <br />
-      <div class="imgae" v-show="accountInfo.imgUrl!=undefined && accountInfo.imgUrl.substr(0, 4) == 'http'">
+      <div class="imgae" v-show="imgUrlList.length>0">
         <p><b>个人风采:</b></p>
-        <img alt="图片" :src="accountInfo.imgUrl" style="width: 80%;" />
+        <img v-for="(v, i) in imgUrlList" :key="i" :src="v" style="width: 80%;" />
+        <!-- <img alt="图片" :src="accountInfo.imgUrl" style="width: 80%;" /> -->
       </div>
       <div><button @click="clickClose">关闭</button></div>
     </div>
@@ -25,7 +26,8 @@ export default {
   data() {
     return {
       showLoading: false,
-      accountInfo: {}
+      accountInfo: {},
+      imgUrlList:[]
     }
   },
   computed: {},
@@ -34,6 +36,7 @@ export default {
     var accountInfo = this.$route.params
     if (accountInfo.accountId != undefined) {
       this.accountInfo = accountInfo
+      this.parseImg(this.accountInfo.imgUrl);
       return
     }
     const accountId = this.$route.query.accountId
@@ -54,7 +57,11 @@ export default {
         debugger
         console.log('requestSelect:', data)
         this.accountInfo = data.accountList[0]
+        this.parseImg(this.accountInfo.imgUrl);
       })
+    },
+    parseImg(imgUrls){
+      this.imgUrlList = imgUrls.split(";");
     },
     clickClose() {
       this.$router.go(-1)

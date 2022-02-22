@@ -26,17 +26,8 @@ export function requestDel(data) {
 
 export function requestSet(data) {
   return request({
-    url: 'account_set',
+    url: '/account_set',
     method: 'post',
     params: data
-  })
-}
-
-export function updateImg(data, config) {
-  return request({
-    url: 'upload_img',
-    method: 'post',
-    formData: data,
-    config: config
   })
 }

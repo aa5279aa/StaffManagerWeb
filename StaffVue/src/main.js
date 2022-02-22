@@ -9,7 +9,7 @@ router.beforeEach((to, from, next) => {
   debugger
   document.title = '京东金融员工信息'
   if (to.path == '/') {
-    next('/login')
+    next()
     return
   }
   if (to.path == '/select') {
@@ -17,15 +17,10 @@ router.beforeEach((to, from, next) => {
     return
   }
   if (lstore.state.isLogin) {
-    if (to.path == '/login') {
-      next('/manager')
-    } else {
-      next();
-    }
+    next();
     return;
   }
-  next('/login')
-
+  next('/')
 })
 
 new Vue({

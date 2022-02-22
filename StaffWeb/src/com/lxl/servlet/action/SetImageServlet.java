@@ -41,10 +41,8 @@ public class SetImageServlet extends HttpServlet {
             //转换为ImageModel
             ImageModel imageModel = inputService.readImageModel(list);
 
-            //主线程保存图片信息
-
             //线程    保存图片
-            JSONObject data = inputService.saveImage(imageModel,realPath);
+            JSONObject data = inputService.saveImage(imageModel, realPath);
             String s = ServletUtil.buildReponse(response, data);
             writer.write(s);
         } catch (Exception e) {

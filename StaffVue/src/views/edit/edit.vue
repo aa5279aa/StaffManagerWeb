@@ -19,6 +19,7 @@
           <el-upload
             class="el-upload"
             ref="upload"
+            multiple
             :action="this.SERVE_URL + 'upload_img'"
             name="excelFile"
             drag
@@ -45,7 +46,8 @@
 </template>
 
 <script>
-// import axios from 'axios'
+// import qs from 'qs'
+
 export default {
   components: {},
   props: {},
@@ -56,11 +58,9 @@ export default {
       accountInfo: {},
       imageUrl: '',
       imageFile: {},
-      form: {
-        fileName: '',
-        coordinateType: 'BD09'
-      },
-      fileList: []
+      form: {},
+      fileList: [],
+      uploadSucessList: []
     }
   },
   computed: {
@@ -76,18 +76,20 @@ export default {
   mounted() {},
   methods: {
     onUploadChange(file) {
+      if (file.status != 'ready') {
+        return
+      }
       this.fileList.push(file)
     },
     //文件上传成功触发
     uploadSuccess(response) {
-      debugger
       console.log(response)
+
       if (response.data.status == 200) {
-        // this.$message({
-        //   message: '导入成功',
-        //   type: 'success'
-        // })
-        this.requestRegister(response.data.imgUrl)
+        this.uploadSucessList = this.uploadSucessList.concat(response.data.imgList)
+        if (this.uploadSucessList.length == this.fileList.length) {
+          this.requestRegister(this.uploadSucessList)
+        }
       } else {
         this.$message({
           message: '导入失败',
@@ -97,7 +99,6 @@ export default {
     },
     //文件上传失败触发
     uploadFalse() {
-      debugger
       this.$message({
         message: '文件上传失败！',
         type: 'error'
@@ -108,22 +109,27 @@ export default {
     onCancel() {
       this.$refs.form.resetFields()
     },
-    requestRegister(imgUrl) {
+    requestRegister(imgUrlList) {
       debugger
-      this.accountInfo.imgUrl = imgUrl
-      const params = {
-        accountInfo: JSON.stringify(this.accountInfo)
-      }
-      console.log('account:' + JSON.stringify(params))
-      //请求登录
       var that = this
+      var imgUrl = '';
+      imgUrlList.forEach(function (img) {
+        imgUrl = imgUrl + img.imgUrl+";"
+      })
+       this.accountInfo.imgUrl = imgUrl
+      const data = {
+        accountInfo: JSON.stringify(this.accountInfo)
+      }     
+      //这里
+      console.log('account:' + JSON.stringify(data))
+      //请求登录
       this.$apis.user
-        .requestSet(params)
-        .then(data => {
+        .requestSet(data)
+        .then(response => {
           debugger
-          console.log(data.message)
+          console.log(response.message)
           this.$message({
-            message: data.message
+            message: response.message
           })
           setTimeout(() => {
             that.$router.go(-1)
@@ -138,18 +144,12 @@ export default {
     },
     //表单提交
     submitUpload() {
-      debugger
       if (this.fileList.length == 0) {
-        this.requestRegister('')
+        this.requestRegister([])
         return
       }
-      this.$refs.form.validate(valid => {
-        debugger
-        if (valid) {
-          //触发组件的action
-          this.$refs.upload.submit() //主要是这里
-        }
-      })
+      //触发组件的action
+      this.$refs.upload.submit() //主要是这里
     },
     closePage() {
       this.$router.go(-1)
